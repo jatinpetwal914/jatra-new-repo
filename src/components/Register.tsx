@@ -125,7 +125,7 @@ export default function Register() {
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-20 w-full max-w-2xl bg-gray-900/40 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative z-20 w-full max-w-2xl bg-gray-900/40 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col h-full max-h-[90vh] md:h-auto"
       >
         {/* Sticky Header */}
         <div className="text-center p-6 sm:p-8 pb-4 border-b border-white/10 bg-white/5 shrink-0">

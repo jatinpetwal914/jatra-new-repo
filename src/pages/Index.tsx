@@ -6,7 +6,7 @@ import About from "@/components/About";
 import Events from "@/components/Events";
 import Guests from "@/components/Guests";
 import Register from "@/components/Register";
-import Sponsor from "@/components/Sponsor";
+import Sponsor from "@/components/sponsor";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -38,6 +38,9 @@ const Index = () => {
         </div>
       </main>
       <Footer />
+      <div className="w-full">
+        <PatternStrip isBottom />
+      </div>
     </div>
   );
 };

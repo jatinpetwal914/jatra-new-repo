@@ -75,7 +75,7 @@ const Guests = () => {
             </p>
           </div>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => scrollCards(-1)}

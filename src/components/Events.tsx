@@ -131,11 +131,11 @@ const festivalData = [
 
 // --- Styled Components ---
 
-const PageContainer = styled.div<{ bgImage: string }>`
+const PageContainer = styled.div<{ $bgImage: string }>`
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-image: url(${props => props.bgImage || fallbackBg});
+  background-image: url(${props => props.$bgImage || fallbackBg});
   background-size: cover;
   background-position: center;
   color: ${colors.textLight};
@@ -320,7 +320,7 @@ const DestinationsSlider = styled.div`
   }
 `;
 
-const DestinationCard = styled.div<{ active?: boolean }>`
+const DestinationCard = styled.div<{ $active?: boolean }>`
   position: relative;
   width: 150px;
   height: 240px;
@@ -332,7 +332,7 @@ const DestinationCard = styled.div<{ active?: boolean }>`
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   border: 2px solid transparent;
 
-  ${props => props.active && css`
+  ${props => props.$active && css`
     transform: scale(1.15);
     box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
     border-color: ${colors.activeYellow};
@@ -343,7 +343,7 @@ const DestinationCard = styled.div<{ active?: boolean }>`
     width: 140px;
     height: 200px;
     scroll-snap-align: center; /* Snaps the card cleanly into view when sliding */
-    ${props => props.active && css`
+    ${props => props.$active && css`
       transform: scale(1.08); /* Slightly smaller scale on mobile */
     `}
   }
@@ -440,10 +440,10 @@ const SliderIndicators = styled.div`
   align-items: center;
 `;
 
-const IndicatorLine = styled.div<{ active?: boolean }>`
-  width: ${props => props.active ? '24px' : '12px'};
+const IndicatorLine = styled.div<{ $active?: boolean }>`
+  width: ${props => props.$active ? '24px' : '12px'};
   height: 3px;
-  background-color: ${props => props.active ? colors.activeYellow : 'rgba(255, 255, 255, 0.3)'};
+  background-color: ${props => props.$active ? colors.activeYellow : 'rgba(255, 255, 255, 0.3)'};
   transition: width 0.3s ease, background-color 0.3s ease;
   border-radius: 2px;
 `;
@@ -564,13 +564,15 @@ const InteractiveJatraFestival: React.FC = () => {
 
   // Auto-Slide Logic
   useEffect(() => {
+    if (isModalOpen) return;
+
     const autoSlideTimer = setInterval(() => {
       setCurrentDestIndex((prev) => (prev + 1) % festivalData.length);
     }, 5000); // Transitions every 5 seconds
     
     // Clear timer on unmount to prevent memory leaks
     return () => clearInterval(autoSlideTimer);
-  }, []);
+  }, [isModalOpen]);
 
   // Arrow Handlers
   const handleNext = () => {
@@ -584,86 +586,73 @@ const InteractiveJatraFestival: React.FC = () => {
   const currentData = festivalData[currentDestIndex];
 
   return (
-    <PageContainer bgImage={currentData.mainBgImage}>
-      <PageOverlay />
+    <div id="events" className="scroll-mt-[100px]">
+      <PageContainer $bgImage={currentData.mainBgImage}>
+        <PageOverlay />
 
-      {/* --- Header (Navbar) ---
-      <Header>
-        <LogoContainer>
-          <LogoIcon src={jatraLogo} alt="Jatra Logo" />
-          JATRA FESTIVAL
-        </LogoContainer>
-        <NavLinks>
-          <NavLink href="#home">HOME</NavLink>
-          <NavLink href="#schedule">SCHEDULE</NavLink>
-          <NavLink href="#guests">GUESTS</NavLink>
-          <NavLink href="#gallery">GALLERY</NavLink>
-          <NavLink href="#register">REGISTER</NavLink>
-        </NavLinks>
-      </Header> */}
+        {/* --- Main Hero Content --- */}
+        <MainContent>
+          <HeroContent key={currentDestIndex}>
+            <ContentDivider />
+            <SubtitleDetail>{currentData.subtitle}</SubtitleDetail>
+            <Headline>{currentData.title}</Headline>
+            <Description>{currentData.description}</Description>
+            <DiscoveryButton onClick={() => setIsModalOpen(true)}>
+              VIEW DAY SCHEDULE
+            </DiscoveryButton>
+          </HeroContent>
 
-      {/* --- Main Hero Content --- */}
-      <MainContent>
-        <HeroContent key={currentDestIndex}>
-          <ContentDivider />
-          <SubtitleDetail>{currentData.subtitle}</SubtitleDetail>
-          <Headline>{currentData.title}</Headline>
-          <Description>{currentData.description}</Description>
-          <DiscoveryButton onClick={() => setIsModalOpen(true)}>
-            VIEW DAY SCHEDULE
-          </DiscoveryButton>
-        </HeroContent>
+          {/* --- Interactive Slider --- */}
+          <DestinationsSlider>
+            {festivalData.map((dest, index) => (
+              <DestinationCard 
+                key={dest.id}
+                $active={index === currentDestIndex}
+                onClick={() => setCurrentDestIndex(index)}
+              >
+                <CardImage src={dest.thumbImage} alt={dest.title} />
+                <CardOverlay />
+                <CardContent>
+                  <CardSubtitle>{dest.subtitle}</CardSubtitle>
+                  <CardTitle>{dest.title}</CardTitle>
+                </CardContent>
+              </DestinationCard>
+            ))}
+          </DestinationsSlider>
+        </MainContent>
 
-        {/* --- Interactive Slider --- */}
-        <DestinationsSlider>
-          {festivalData.map((dest, index) => (
-            <DestinationCard 
-              key={dest.id}
-              active={index === currentDestIndex}
-              onClick={() => setCurrentDestIndex(index)}
-            >
-              <CardImage src={dest.thumbImage} alt={dest.title} />
-              <CardOverlay />
-              <CardContent>
-                <CardSubtitle>{dest.subtitle}</CardSubtitle>
-                <CardTitle>{dest.title}</CardTitle>
-              </CardContent>
-            </DestinationCard>
-          ))}
-        </DestinationsSlider>
-      </MainContent>
+        {/* --- Bottom Controls (Now with Arrows) --- */}
+        <BottomControls>
+          <ArrowButton onClick={handlePrev}>❮</ArrowButton>
+          <SliderIndicators>
+            {festivalData.map((_, index) => (
+              <IndicatorLine key={index} $active={index === currentDestIndex} />
+            ))}
+          </SliderIndicators>
+          <ArrowButton onClick={handleNext}>❯</ArrowButton>
+          <SlideNumber>0{currentDestIndex + 1}</SlideNumber>
+        </BottomControls>
 
-      {/* --- Bottom Controls (Now with Arrows) --- */}
-      <BottomControls>
-        <ArrowButton onClick={handlePrev}>❮</ArrowButton>
-        <SliderIndicators>
-          {festivalData.map((_, index) => (
-            <IndicatorLine key={index} active={index === currentDestIndex} />
-          ))}
-        </SliderIndicators>
-        <ArrowButton onClick={handleNext}>❯</ArrowButton>
-        <SlideNumber>0{currentDestIndex + 1}</SlideNumber>
-      </BottomControls>
-
-      {/* --- Modal Popup Component --- */}
-      {isModalOpen && (
-        <ModalOverlay onClick={() => setIsModalOpen(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              <ModalTitle>{currentData.subtitle}: {currentData.title}</ModalTitle>
-              <CloseIcon onClick={() => setIsModalOpen(false)}>&times;</CloseIcon>
-            </ModalHeader>
-            <ModalBody>
-              <EventList>
-                {currentData.events.map((event, i) => (
-                  <EventItem key={i}>{event}</EventItem>
-                ))}
-              </EventList>
-            </ModalBody>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-    </PageContainer>
+        {/* --- Modal Popup Component --- */}
+        {isModalOpen && (
+          <ModalOverlay onClick={() => setIsModalOpen(false)}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <ModalHeader>
+                <ModalTitle>{currentData.subtitle}: {currentData.title}</ModalTitle>
+                <CloseIcon onClick={() => setIsModalOpen(false)}>&times;</CloseIcon>
+              </ModalHeader>
+              <ModalBody>
+                <EventList>
+                  {currentData.events.map((event, i) => (
+                    <EventItem key={i}>{event}</EventItem>
+                  ))}
+                </EventList>
+              </ModalBody>
+            </ModalContent>
+          </ModalOverlay>
+        )}
+      </PageContainer>
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ const quickLinks = [
 const socials = [
   { href: "https://www.instagram.com/jatra.thekasarfestival?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", label: "Instagram", Icon: Instagram },
   { href: "https://www.youtube.com/", label: "YouTube", Icon: Youtube },
-  { href: "https://www.facebook.com/share/18eEqM3cPp/?mibextid=wwXIfr", label: "Facebook", Icon: Facebook },
+  { href: "https://www.facebook.com/Jatrathekasarfestival", label: "Facebook", Icon: Facebook },
 ];
 
 const Footer = () => (
@@ -54,10 +54,10 @@ const Footer = () => (
           <div className="mt-5 space-y-4 text-sm text-white/75">
             <a href="tel:+911234567890" className="flex items-start gap-3 transition-smooth hover:text-white">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <span>+91 12345 67890</span>
+              <span>+91 74650 86956</span>
             </a>
             <a
-              href="mailto:info@jatrafest.in"
+              href="contact@jatrafest.in"
               className="flex items-start gap-3 transition-smooth hover:text-white"
             >
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" />

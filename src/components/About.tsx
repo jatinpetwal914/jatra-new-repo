@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
-import { Landmark, Leaf, Mountain, Users2 } from "lucide-react";
+import { Landmark, Leaf, Mountain, Users2, ChevronLeft, ChevronRight } from "lucide-react";
 import mountainImg from "@/assets/hero-mountains.jpg";
 import backgroundImg from "@/assets/KASAR-BG-WEB.png";
+import cultureImg from "@/assets/culture.png";
+import adventureImg from "@/assets/Adventure.png";
+import sustainabilityImg from "@/assets/Susttainiblity.png";
+import communityImg from "@/assets/Community.png";
 
 const pillars = [
   {
@@ -9,28 +13,28 @@ const pillars = [
     color: "festival-blue",
     title: "Culture",
     desc: "Living folk traditions, craft and music from the hills.",
-    img: "/src/assets/culture.png",
+    img: cultureImg,
   },
   {
     icon: Mountain,
     color: "festival-yellow",
     title: "Adventure",
     desc: "Outdoor energy woven into a five-day mountain gathering.",
-    img: "/src/assets/Adventure.png",
+    img: adventureImg,
   },
   {
     icon: Leaf,
     color: "festival-green",
     title: "Sustainability",
     desc: "Thoughtful local choices and low-impact festival design.",
-    img: "/src/assets/Susttainiblity.png",
+    img: sustainabilityImg,
   },
   {
     icon: Users2,
     color: "festival-red",
     title: "Community",
     desc: "Built with artists, locals, travellers and young volunteers.",
-    img: "/src/assets/Community.png",
+    img: communityImg,
   },
 ];
 
@@ -49,29 +53,15 @@ const features = [
 const About = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    let animationFrame: number;
-    let speed = 0.5;
-
-    const scroll = () => {
-      if (!container) return;
-
-      if (container.scrollLeft >= container.scrollWidth / 2) {
-        container.scrollLeft = 0;
-      } else {
-        container.scrollLeft += speed;
-      }
-
-      animationFrame = requestAnimationFrame(scroll);
-    };
-
-    animationFrame = requestAnimationFrame(scroll);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 340;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <section id="about" className="py-24 relative" style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
@@ -95,19 +85,37 @@ const About = () => {
         </div>
 
         {/* SLIDER */}
-        <div className="mt-16">
-          <p className="text-center text-sm uppercase tracking-[0.3em] text-accent mb-8">
-            Key Highlights of Jatra
-          </p>
+        <div className="mt-16 relative">
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-sm uppercase tracking-[0.3em] text-accent">
+              Key Highlights of Jatra
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => scroll("left")}
+                className="p-2 rounded-full border border-border/50 bg-white/80 hover:bg-white shadow-sm transition-all"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft size={20} className="text-accent" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                className="p-2 rounded-full border border-border/50 bg-white/80 hover:bg-white shadow-sm transition-all"
+                aria-label="Scroll right"
+              >
+                <ChevronRight size={20} className="text-accent" />
+              </button>
+            </div>
+          </div>
 
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide"
+            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x"
           >
-            {[...features, ...features].map((item, i) => (
+            {features.map((item, i) => (
               <div
                 key={i}
-                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border border-border/50 bg-white/90 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border border-border/50 bg-white/90 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 snap-start"
               >
                 {/* COLOR BAR */}
                 <div

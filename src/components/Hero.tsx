@@ -6,7 +6,7 @@ import video from "@/assets/vid1.mp4";
 import jatraLogo from "@/assets/jatra-logo.png";
 import jatraWordmark from "@/assets/jatra-wordmark.png";
 
-const HeroSection = () => {
+const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [logoIndex, setLogoIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -41,7 +41,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black flex flex-col justify-end">
+    <section id="home" className="relative min-h-screen w-full overflow-hidden bg-black flex flex-col justify-end scroll-mt-[100px]">
       
       {/* 🎬 VIDEO BACKGROUND */}
       <div className="absolute inset-0 z-0">
@@ -59,7 +59,7 @@ const HeroSection = () => {
       </div>
 
       {/* 🏛️ BOTTOM LEFT CONTENT GROUP */}
-      <div className="relative z-25 ml-6 md:ml-12 mb-10 flex flex-col items-start gap-2 md:gap-0">
+      <div className="relative z-25 ml-6 md:ml-12 mb-16 md:mb-10 flex flex-col items-start gap-2 md:gap-0">
         
         {/* 1. LOGO - Container height removed for tighter fit */}
         <div className="w-84 md:w-[450px] flex items-start justify-start pointer-events-none">
@@ -102,6 +102,7 @@ const HeroSection = () => {
           transition={{ delay: 0.5 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={onRegisterClick}
           className="px-7 py-5 md:px-14 md:py-3 bg-[#FFB800] rounded-[2rem] shadow-2xl transition-all pointer-events-auto"
         >
           <span className="text-white text-lg md:text-2xl font-black uppercase tracking-tight">
