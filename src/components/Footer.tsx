@@ -61,7 +61,7 @@ const Footer = () => (
               className="flex items-start gap-3 transition-smooth hover:text-white"
             >
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <span>info@jatrafest.in</span>
+              <span>contactjatrafest.in</span>
             </a>
             <div className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />

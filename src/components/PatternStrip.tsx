@@ -8,10 +8,15 @@ const PatternStrip = ({ className, isBottom }: { className?: string; isBottom?: 
       isBottom ? "border-t border-border/30" : "border-b border-border/30",
       className
     )}>
-      <img 
-        src={borderImage} 
-        alt="Decorative Border" 
-        className="w-full h-8 md:h-14 object-contain"
+      <div 
+        className="w-full h-8 md:h-14"
+        style={{ 
+          backgroundImage: `url(${borderImage})`,
+          backgroundSize: 'auto 100%',
+          backgroundRepeat: 'repeat-x',
+          backgroundPosition: 'center'
+        }}
+        aria-label="Decorative Border"
       />
     </div>
   );
