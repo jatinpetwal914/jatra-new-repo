@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
 // --- Asset Imports based on your folder structure ---
-// Adjust the relative path '../' if your component is nested deeper in the src folder.
 import day1Img from '../assets/events/day1-aipan.jpg';
 import day2Img from '../assets/events/day2-competitions.jpg';
 import day3Img from '../assets/events/day3-stage.jpg';
@@ -152,7 +151,7 @@ const PageOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Darkened slightly for better text contrast */
+  background-color: rgba(0, 0, 0, 0.6); 
 `;
 
 // --- Header ---
@@ -167,6 +166,10 @@ const Header = styled.header`
   padding: 20px 60px;
   background-color: transparent;
   z-index: 100;
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+  }
 `;
 
 const LogoContainer = styled.div`
@@ -191,6 +194,10 @@ const NavLinks = styled.nav`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+
+  @media (max-width: 768px) {
+    display: none; /* Hidden on mobile to save space */
+  }
 `;
 
 const NavLink = styled.a`
@@ -207,20 +214,32 @@ const MainContent = styled.main`
   position: relative;
   display: flex;
   justify-content: space-between;
-  
-  /* CHANGED: Switched from center to flex-end to shift everything lower */
   align-items: flex-end; 
-  /* CHANGED: Increased bottom padding to prevent overlap with BottomControls */
   padding: 100px 60px 140px; 
-  
   height: 100vh;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 80px 20px 110px;
+    text-align: center;
+  }
 `;
 
 const HeroContent = styled.div`
   flex: 1;
   max-width: 45%;
   animation: ${fadeIn} 0.8s ease-in-out;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ContentDivider = styled.div`
@@ -246,20 +265,23 @@ const Headline = styled.h1`
   text-transform: uppercase;
   margin-bottom: 20px;
   text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+
+  @media (max-width: 768px) {
+    font-size: 42px;
+  }
 `;
 
 const Description = styled.p`
   font-size: 14px;
   color: #eeeeee;
   line-height: 1.6;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   max-width: 90%;
-`;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 15px;
-  align-items: center;
+  @media (max-width: 768px) {
+    max-width: 100%;
+    font-size: 13px;
+  }
 `;
 
 const DiscoveryButton = styled.button`
@@ -286,20 +308,23 @@ const DiscoveryButton = styled.button`
 const DestinationsSlider = styled.div`
   display: flex;
   gap: 20px;
-  
-  /* CHANGED: Added 20px horizontal padding to fix the clipped corner glitch.
-     This gives the scaled (1.15) active card room to expand without getting cut off. */
   padding: 40px 20px; 
-  
   overflow-x: auto;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    padding: 20px;
+    scroll-snap-type: x mandatory; /* Enables smooth native swiping */
+  }
 `;
 
 const DestinationCard = styled.div<{ active?: boolean }>`
   position: relative;
   width: 150px;
   height: 240px;
+  flex-shrink: 0; /* CRITICAL FIX: prevents horizontal squishing */
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -313,6 +338,15 @@ const DestinationCard = styled.div<{ active?: boolean }>`
     border-color: ${colors.activeYellow};
     z-index: 5;
   `}
+
+  @media (max-width: 768px) {
+    width: 140px;
+    height: 200px;
+    scroll-snap-align: center; /* Snaps the card cleanly into view when sliding */
+    ${props => props.active && css`
+      transform: scale(1.08); /* Slightly smaller scale on mobile */
+    `}
+  }
 `;
 
 const CardImage = styled.img`
@@ -351,6 +385,77 @@ const CardTitle = styled.h3`
   text-transform: uppercase;
   margin: 0;
   line-height: 1.2;
+`;
+
+// --- Bottom Controls ---
+const BottomControls = styled.div`
+  position: absolute;
+  bottom: 60px;
+  right: 60px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  z-index: 100;
+
+  @media (max-width: 768px) {
+    bottom: 25px;
+    right: 50%;
+    transform: translateX(50%); /* Centers perfectly on mobile */
+    width: 100%;
+    justify-content: center;
+    padding: 0 20px;
+    gap: 15px;
+  }
+`;
+
+const ArrowButton = styled.button`
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 14px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${colors.activeYellow};
+    color: ${colors.textDark};
+    border-color: ${colors.activeYellow};
+  }
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const SliderIndicators = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const IndicatorLine = styled.div<{ active?: boolean }>`
+  width: ${props => props.active ? '24px' : '12px'};
+  height: 3px;
+  background-color: ${props => props.active ? colors.activeYellow : 'rgba(255, 255, 255, 0.3)'};
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 2px;
+`;
+
+const SlideNumber = styled.div`
+  font-size: 28px;
+  font-weight: 900;
+  color: ${colors.textLight};
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
 `;
 
 // --- Modal Popup ---
@@ -396,6 +501,10 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+  }
 `;
 
 const ModalTitle = styled.h2`
@@ -405,6 +514,8 @@ const ModalTitle = styled.h2`
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
+
+  @media (max-width: 768px) { font-size: 18px; }
 `;
 
 const CloseIcon = styled.button`
@@ -419,6 +530,7 @@ const CloseIcon = styled.button`
 
 const ModalBody = styled.div`
   padding: 30px;
+  @media (max-width: 768px) { padding: 20px; }
 `;
 
 const EventList = styled.ul`
@@ -445,49 +557,37 @@ const EventItem = styled.li`
   }
 `;
 
-// --- Bottom Controls ---
-const BottomControls = styled.div`
-  position: absolute;
-  bottom: 60px;
-  right: 60px;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  z-index: 100;
-`;
-
-const SliderIndicators = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
-
-const IndicatorLine = styled.div<{ active?: boolean }>`
-  width: ${props => props.active ? '24px' : '12px'};
-  height: 3px;
-  background-color: ${props => props.active ? colors.activeYellow : 'rgba(255, 255, 255, 0.3)'};
-  transition: width 0.3s ease, background-color 0.3s ease;
-  border-radius: 2px;
-`;
-
-const SlideNumber = styled.div`
-  font-size: 28px;
-  font-weight: 900;
-  color: ${colors.textLight};
-`;
-
 // --- Main Page Component ---
 const InteractiveJatraFestival: React.FC = () => {
   const [currentDestIndex, setCurrentDestIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Auto-Slide Logic
+  useEffect(() => {
+    const autoSlideTimer = setInterval(() => {
+      setCurrentDestIndex((prev) => (prev + 1) % festivalData.length);
+    }, 5000); // Transitions every 5 seconds
+    
+    // Clear timer on unmount to prevent memory leaks
+    return () => clearInterval(autoSlideTimer);
+  }, []);
+
+  // Arrow Handlers
+  const handleNext = () => {
+    setCurrentDestIndex((prev) => (prev + 1) % festivalData.length);
+  };
+  
+  const handlePrev = () => {
+    setCurrentDestIndex((prev) => (prev === 0 ? festivalData.length - 1 : prev - 1));
+  };
+
   const currentData = festivalData[currentDestIndex];
 
   return (
     <PageContainer bgImage={currentData.mainBgImage}>
       <PageOverlay />
 
-      {/* --- Header (Navbar) --- */}
-      {/* Uncommented to match your requirements and allow future navigation updates
+      {/* --- Header (Navbar) ---
       <Header>
         <LogoContainer>
           <LogoIcon src={jatraLogo} alt="Jatra Logo" />
@@ -500,8 +600,7 @@ const InteractiveJatraFestival: React.FC = () => {
           <NavLink href="#gallery">GALLERY</NavLink>
           <NavLink href="#register">REGISTER</NavLink>
         </NavLinks>
-      </Header> 
-      */}
+      </Header> */}
 
       {/* --- Main Hero Content --- */}
       <MainContent>
@@ -510,11 +609,9 @@ const InteractiveJatraFestival: React.FC = () => {
           <SubtitleDetail>{currentData.subtitle}</SubtitleDetail>
           <Headline>{currentData.title}</Headline>
           <Description>{currentData.description}</Description>
-          <ButtonGroup>
-            <DiscoveryButton onClick={() => setIsModalOpen(true)}>
-              VIEW DAY SCHEDULE
-            </DiscoveryButton>
-          </ButtonGroup>
+          <DiscoveryButton onClick={() => setIsModalOpen(true)}>
+            VIEW DAY SCHEDULE
+          </DiscoveryButton>
         </HeroContent>
 
         {/* --- Interactive Slider --- */}
@@ -536,13 +633,15 @@ const InteractiveJatraFestival: React.FC = () => {
         </DestinationsSlider>
       </MainContent>
 
-      {/* --- Bottom Controls --- */}
+      {/* --- Bottom Controls (Now with Arrows) --- */}
       <BottomControls>
+        <ArrowButton onClick={handlePrev}>❮</ArrowButton>
         <SliderIndicators>
           {festivalData.map((_, index) => (
             <IndicatorLine key={index} active={index === currentDestIndex} />
           ))}
         </SliderIndicators>
+        <ArrowButton onClick={handleNext}>❯</ArrowButton>
         <SlideNumber>0{currentDestIndex + 1}</SlideNumber>
       </BottomControls>
 
