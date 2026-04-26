@@ -53,15 +53,30 @@ const features = [
 const About = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = 340;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let animationFrame: number;
+    const speed = 0.5; // Adjust speed as needed
+
+    const scroll = () => {
+      if (!container) return;
+
+      // When we reach the end of the first set of items, reset to the beginning
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft = 0;
+      } else {
+        container.scrollLeft += speed;
+      }
+
+      animationFrame = requestAnimationFrame(scroll);
+    };
+
+    animationFrame = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
 
   return (
     <section id="about" className="py-24 relative" style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
@@ -86,36 +101,18 @@ const About = () => {
 
         {/* SLIDER */}
         <div className="mt-16 relative">
-          <div className="flex items-center justify-between mb-8">
-            <p className="text-sm uppercase tracking-[0.3em] text-accent">
-              Key Highlights of Jatra
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => scroll("left")}
-                className="p-2 rounded-full border border-border/50 bg-white/80 hover:bg-white shadow-sm transition-all"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft size={20} className="text-accent" />
-              </button>
-              <button
-                onClick={() => scroll("right")}
-                className="p-2 rounded-full border border-border/50 bg-white/80 hover:bg-white shadow-sm transition-all"
-                aria-label="Scroll right"
-              >
-                <ChevronRight size={20} className="text-accent" />
-              </button>
-            </div>
-          </div>
+          <p className="text-center text-sm uppercase tracking-[0.3em] text-accent mb-8">
+            Key Highlights of Jatra
+          </p>
 
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x"
+            className="flex gap-6 overflow-hidden pointer-events-none"
           >
-            {features.map((item, i) => (
+            {[...features, ...features].map((item, i) => (
               <div
                 key={i}
-                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border border-border/50 bg-white/90 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 snap-start"
+                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border border-border/50 bg-white/90 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
               >
                 {/* COLOR BAR */}
                 <div
