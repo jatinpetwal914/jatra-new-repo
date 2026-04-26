@@ -67,7 +67,6 @@ export default function Register() {
     });
   };
 
-  // === UPDATED HANDLESUBMIT FOR API INTEGRATION ===
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isUndertakingComplete) {
@@ -85,7 +84,6 @@ export default function Register() {
       // CHANGE THIS URL to your actual live cPanel domain where register.php is hosted
       const response = await fetch('https://jatrafestival.in/api/register.php', {
         method: 'POST',
-        // ... rest of the code stays the same
         headers: {
           'Content-Type': 'application/json',
         },
@@ -111,7 +109,8 @@ export default function Register() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center p-4 py-12">
+    // UPDATED: justify-start and lg:pl-20 to push to the left on desktop
+    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-start p-4 py-12 lg:pl-20">
       
       {/* Background Image */}
       <div 
@@ -121,9 +120,10 @@ export default function Register() {
 
       <div className="absolute inset-0 z-10 bg-black/10 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
 
+      {/* UPDATED: initial={{ x: -50, opacity: 0 }} for slide-in from left */}
       <motion.div 
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ x: -50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-20 w-full max-w-2xl bg-gray-900/40 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden flex flex-col max-h-[90vh]"
       >

@@ -6,6 +6,7 @@ import About from "@/components/About";
 import Events from "@/components/Events";
 import Guests from "@/components/Guests";
 import Register from "@/components/Register";
+import Sponsor from "@/components/Sponsor";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -31,6 +32,9 @@ const Index = () => {
         <Guests />
         <div ref={registerRef} id="register" className="scroll-mt-[100px]">
           <Register />
+        </div>
+        <div id="sponsors" className="scroll-mt-[100px]">
+          <Sponsor />
         </div>
       </main>
       <Footer />

@@ -6,6 +6,7 @@ const links = [
   { href: "#events", label: "Events" },
   { href: "#guests", label: "Guests" },
   { href: "#register", label: "Register" },
+  { href: "#sponsors", label: "Sponsors" },
 ];
 
 const Navbar = () => {
