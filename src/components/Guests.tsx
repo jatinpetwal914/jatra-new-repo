@@ -57,19 +57,19 @@ const Guests = () => {
   return (
     <section
       id="guests"
-      className="relative overflow-hidden bg-[linear-gradient(180deg,#0d1825_0%,#122032_50%,#17273b_100%)] py-24 text-white sm:py-28"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,#0d1825_0%,#122032_50%,#17273b_100%)] py-16 text-white sm:py-20 md:py-24"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,184,76,0.18),transparent_30%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.04))]" />
 
-      <div className="container relative">
+      <div className="container relative px-4 sm:px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl fade-in-up">
+          <div className="max-w-xl fade-in-up">
             <div className="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.38em] text-accent">
               Featured Guests
             </div>
-            <h2 className="text-4xl md:text-5xl">VOICES OF UTTARAKHAND</h2>
-            <p className="mt-4 text-base leading-7 text-white/72">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl leading-tight">VOICES OF UTTARAKHAND</h2>
+            <p className="mt-4 text-base leading-7 text-white/72 sm:max-w-lg">
               Artists, narrators and keepers of culture who bring the spirit of the region to the
               festival stage.
             </p>
@@ -97,31 +97,41 @@ const Guests = () => {
 
         <div
           ref={sliderRef}
-          className="no-scrollbar mt-12 flex snap-x gap-5 overflow-x-auto pb-4 scroll-smooth"
+          className="no-scrollbar mt-12 flex snap-x gap-4 overflow-x-auto pb-4 scroll-smooth sm:gap-5"
         >
           {guests.map((guest, index) => (
             <article
-              key={guest.name}
-              className="group min-w-[260px] max-w-[260px] snap-start overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 backdrop-blur-xl transition-smooth hover:-translate-y-2 hover:bg-white/12"
-              style={{ animationDelay: `${index * 60}ms` }}
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
-                <img
-                  src={guest.img}
-                  alt={`${guest.name} - ${guest.role}`}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-smooth group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-              </div>
-              <div className="p-5">
-                <h3 className="text-xl leading-tight text-white">{guest.name}</h3>
-                <div className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-                  {guest.role}
-                </div>
-                <p className="mt-3 truncate text-sm leading-6 text-white/72">{guest.bio}</p>
-              </div>
-            </article>
+  key={guest.name}
+  className="group relative min-w-[240px] max-w-[260px] snap-start overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 backdrop-blur-xl transition-smooth"
+  style={{ animationDelay: `${index * 60}ms` }}
+>
+  {/* Blurred Content */}
+  <div className="pointer-events-none blur-md select-none">
+    <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
+      <img
+        src={guest.img}
+        alt={`${guest.name} - ${guest.role}`}
+        loading="lazy"
+        className="h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+    </div>
+    <div className="p-5">
+      <h3 className="text-xl leading-tight text-white">{guest.name}</h3>
+      <div className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+        {guest.role}
+      </div>
+      <p className="mt-3 text-sm leading-6 text-white/72">{guest.bio}</p>
+    </div>
+  </div>
+
+  {/* Overlay */}
+  <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <span className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-white">
+      Announcing Soon
+    </span>
+  </div>
+</article>
           ))}
         </div>
       </div>

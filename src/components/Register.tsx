@@ -37,6 +37,8 @@ export default function Register() {
     contribution: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Modal & Undertaking State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [undertaking, setUndertaking] = useState({
@@ -74,42 +76,43 @@ export default function Register() {
       return;
     }
 
-    // Combine form data and the commitment level from the undertaking
+    setIsSubmitting(true);
+
     const submissionData = {
       ...formData,
       level: undertaking.level 
     };
 
     try {
-      // CHANGE THIS URL to your actual live cPanel domain where register.php is hosted
       const response = await fetch('https://jatrafestival.in/api/register.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData),
       });
 
       const result = await response.json();
 
       if (result.status === 'success') {
-        alert(`Registration Complete!\nWelcome to the team, ${formData.name}.`);
+        alert(`Registration Complete!\nWelcome to the team, ${formData.name}. Please check your email for the WhatsApp link and guidelines.`);
         
         // Clear the form after success
         setFormData({ name: '', contact: '', email: '', occupation: '', jatraTeam: 'Yes', priorExperience: '', responsibility: '', meaning: '', areas: [], poc: '', contribution: '' });
         setUndertaking({ level: 0, agree1: false, agree2: false });
         
+      } else if (result.status === 'duplicate') {
+        alert("Registration Failed: " + result.message);
       } else {
         alert("Server Error: " + result.message);
       }
     } catch (error) {
-      alert("Network Error: Could not connect to the server. Make sure your PHP file is uploaded to cPanel and the URL is correct.");
+      alert("Network Error: Could not connect to the server.");
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    // UPDATED: justify-start and lg:pl-20 to push to the left on desktop
     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-start p-4 py-12 lg:pl-20">
       
       {/* Background Image */}
@@ -120,7 +123,6 @@ export default function Register() {
 
       <div className="absolute inset-0 z-10 bg-black/10 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
 
-      {/* UPDATED: initial={{ x: -50, opacity: 0 }} for slide-in from left */}
       <motion.div 
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -176,7 +178,6 @@ export default function Register() {
             <div className="space-y-5">
               <h3 className="text-white font-bold border-b border-white/20 pb-1 mb-3 text-sm uppercase tracking-wider text-opacity-80">Roles & Contribution</h3>
               
-              {/* Jatra Team Question */}
               <div className="bg-black/20 p-4 rounded-xl border border-white/10">
                 <label className="text-sm font-bold text-white mb-3 block text-center">Do you wish to be part of the core Jatra Team?</label>
                 <div className="flex justify-center gap-4">
@@ -186,7 +187,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Area of Contribution */}
               <div>
                 <label className="text-xs font-bold text-white/90 ml-1 mb-2 block">Preferred Area of Contribution (Select multiple)</label>
                 <div className="flex flex-wrap gap-2">
@@ -199,7 +199,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* POC Question */}
               <div>
                 <label className="text-xs font-bold text-white/90 ml-1 mb-2 block">Are you willing to take responsibility as a POC (Point of Contact) if required?</label>
                 <div className="flex gap-3">
@@ -209,7 +208,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Strengths */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-white/90 ml-1">How will you contribute to the team? (Your strengths/skills)</label>
                 <textarea name="contribution" value={formData.contribution} onChange={handleInputChange} rows={2} required className="w-full p-3.5 bg-white/80 border border-white/30 rounded-xl text-gray-900 placeholder-gray-700 focus:bg-white focus:ring-2 focus:ring-[#00A6E6] outline-none transition-all text-sm font-semibold resize-none shadow-sm" />
@@ -240,14 +238,14 @@ export default function Register() {
             {/* Final Submit */}
             <button
               type="submit"
-              disabled={!isUndertakingComplete}
+              disabled={!isUndertakingComplete || isSubmitting}
               className={`w-full py-4 rounded-xl font-black text-lg uppercase tracking-widest transition-all duration-300 ${
                 isUndertakingComplete 
                   ? 'bg-[#D21F3C] text-white shadow-lg hover:shadow-xl hover:bg-[#b01830] transform hover:-translate-y-1' 
                   : 'bg-gray-500/50 text-gray-300 cursor-not-allowed border border-gray-400/30'
               }`}
             >
-              Confirm Registration
+              {isSubmitting ? 'Registering...' : 'Confirm Registration'}
             </button>
             
           </form>
@@ -271,7 +269,6 @@ export default function Register() {
               </div>
 
               <div className="p-6 space-y-8">
-                {/* Scale 1-5 */}
                 <div>
                   <label className="font-bold text-gray-900 block mb-3 text-center">Commitment Level (1 = Not sure, 5 = Fully committed)</label>
                   <div className="flex justify-between max-w-xs mx-auto">
@@ -288,7 +285,6 @@ export default function Register() {
                   </div>
                 </div>
 
-                {/* Checkbox 1 */}
                 <div 
                   onClick={() => setUndertaking(p => ({ ...p, agree1: !p.agree1 }))}
                   className={`p-4 rounded-xl border-2 flex gap-4 cursor-pointer transition-all ${undertaking.agree1 ? 'border-[#2C9646] bg-[#2C9646]/10' : 'border-gray-300 bg-white hover:border-gray-400'}`}
@@ -301,7 +297,6 @@ export default function Register() {
                   </p>
                 </div>
 
-                {/* Checkbox 2 */}
                 <div 
                   onClick={() => setUndertaking(p => ({ ...p, agree2: !p.agree2 }))}
                   className={`p-4 rounded-xl border-2 flex gap-4 cursor-pointer transition-all ${undertaking.agree2 ? 'border-[#2C9646] bg-[#2C9646]/10' : 'border-gray-300 bg-white hover:border-gray-400'}`}
@@ -328,22 +323,11 @@ export default function Register() {
         )}
       </AnimatePresence>
 
-      {/* Global Style for scrollbar to keep it pretty inside the glassmorphism */}
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.4);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
       `}</style>
     </div>
   );

@@ -28,7 +28,6 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
     }
   };
 
-  // Bell Ringing Animation Variants
   const bellShake = {
     ring: {
       rotate: [0, -15, 15, -15, 15, 0],
@@ -42,8 +41,8 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
 
   return (
     <section id="home" className="relative min-h-screen w-full overflow-hidden bg-black flex flex-col justify-end scroll-mt-[100px]">
-      
-      {/* 🎬 VIDEO BACKGROUND */}
+
+      {/* VIDEO */}
       <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
@@ -58,10 +57,9 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* 🏛️ BOTTOM LEFT CONTENT GROUP */}
-      <div className="relative z-25 ml-6 md:ml-12 mb-16 md:mb-10 flex flex-col items-start gap-2 md:gap-0">
-        
-        {/* 1. LOGO - Container height removed for tighter fit */}
+      {/* CONTENT */}
+      <div className="relative z-20 ml-6 md:ml-12 mb-16 md:mb-10 flex flex-col items-start gap-2 md:gap-0">
+
         <div className="w-84 md:w-[450px] flex items-start justify-start pointer-events-none">
           <AnimatePresence mode="wait">
             <motion.img
@@ -77,17 +75,12 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
           </AnimatePresence>
         </div>
 
-        {/* 2. SLOTS TEXT - Positioned closely under the logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3 text-white ml-2 mt-[-10px] md:mt-[-30px] mb-4"
         >
-          <motion.span
-            variants={bellShake}
-            animate="ring"
-            className="text-2xl md:text-3xl origin-top"
-          >
+          <motion.span variants={bellShake} animate="ring" className="text-2xl md:text-3xl origin-top">
             🔔
           </motion.span>
           <span className="text-lg md:text-2xl font-black uppercase tracking-widest italic drop-shadow-lg">
@@ -95,7 +88,6 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
           </span>
         </motion.div>
 
-        {/* 3. REGISTER BUTTON */}
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,7 +95,7 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onRegisterClick}
-          className="px-7 py-5 md:px-14 md:py-3 bg-[#FFB800] rounded-[2rem] shadow-2xl transition-all pointer-events-auto"
+          className="px-7 py-5 md:px-14 md:py-3 bg-[#FFB800] rounded-[2rem] shadow-2xl"
         >
           <span className="text-white text-lg md:text-2xl font-black uppercase tracking-tight">
             Register Now
@@ -111,8 +103,10 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
         </motion.button>
       </div>
 
-      {/* 🔊 MUTE/UNMUTE BUTTON - TOP RIGHT */}
-      <div className="absolute top-32 right-6 md:right-10 z-50">
+      {/* 🔊 MUTE BUTTON (FIXED) */}
+      <div className="absolute top-32 right-6 md:right-10 z-10">
+        {/* ⬆️ CHANGED z-50 → z-10 */}
+
         <button
           type="button"
           onClick={toggleSound}
@@ -129,7 +123,7 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
             )}
           </AnimatePresence>
 
-          <div 
+          <div
             className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center"
             style={{ backgroundColor: isMuted ? "#ff3600" : "rgba(255,255,255,0.2)" }}
           >
@@ -141,6 +135,7 @@ const HeroSection = ({ onRegisterClick }: { onRegisterClick?: () => void }) => {
               )}
             </svg>
           </div>
+
           <span className="text-white text-xs md:text-sm font-bold uppercase tracking-widest pr-2">
             {isMuted ? "Tap for Sound" : "Mute"}
           </span>

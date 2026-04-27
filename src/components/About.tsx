@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Landmark, Leaf, Mountain, Users2, ChevronLeft, ChevronRight } from "lucide-react";
-import mountainImg from "@/assets/hero-mountains.jpg";
+import { Landmark, Leaf, Mountain, Users2 } from "lucide-react";
+
 import backgroundImg from "@/assets/KASAR-BG-WEB.png";
 import cultureImg from "@/assets/culture.png";
 import adventureImg from "@/assets/Adventure.png";
@@ -39,31 +39,37 @@ const pillars = [
 ];
 
 const features = [
-  { title: "Cultural Revival Initiative", desc: "Reconnects people with Uttarakhand’s roots, promoting pride in heritage, traditions, and lifestyle.", color: "blue" },
-  { title: "Vocal for Local", desc: "Supports artisans, craftsmen, and local businesses with traditional and handmade products.", color: "yellow" },
-  { title: "Folk Arts & Traditions", desc: "Showcases folk music, dance, and storytelling from the hills.", color: "green" },
-  { title: "Adventure Sports Integration", desc: "Paragliding, trekking, cycling races, and outdoor challenges.", color: "blue" },
-  { title: "Cultural Discussions & Sessions", desc: "Talks and knowledge-sharing by experts, locals, and youth.", color: "blue" },
-  { title: "Competitions & Engagement", desc: "Folk performances, art, sports, and local skill contests.", color: "blue" },
-  { title: "Cleanliness & Sustainability", desc: "Eco-friendly practices and environmental awareness.", color: "green" },
-  { title: "Community Building", desc: "Bringing locals, tourists, and youth together.", color: "blue" },
-  { title: "Tourism Promotion", desc: "Highlighting Uttarakhand’s beauty and boosting local economy.", color: "blue" },
+  { title: "Cultural Revival Initiative", desc: "Reconnects people with Uttarakhand’s roots.", color: "blue" },
+  { title: "Vocal for Local", desc: "Supports artisans and local businesses.", color: "yellow" },
+  { title: "Folk Arts & Traditions", desc: "Showcases music, dance, storytelling.", color: "green" },
+  { title: "Adventure Sports", desc: "Paragliding, trekking, cycling.", color: "blue" },
+  { title: "Discussions & Sessions", desc: "Talks by experts and locals.", color: "blue" },
+  { title: "Competitions", desc: "Folk, art, sports contests.", color: "blue" },
+  { title: "Sustainability", desc: "Eco-friendly practices.", color: "green" },
+  { title: "Community Building", desc: "Connecting locals and tourists.", color: "blue" },
+  { title: "Tourism Promotion", desc: "Boosting Uttarakhand economy.", color: "blue" },
 ];
 
 const About = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Drag variables
+  let isDown = false;
+  let startX = 0;
+  let scrollLeft = 0;
 
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
     let animationFrame: number;
-    const speed = 0.5; // Adjust speed as needed
+    let isPaused = false;
+
+    const speed = 0.5;
 
     const scroll = () => {
-      if (!container) return;
+      if (!container || isPaused) return;
 
-      // When we reach the end of the first set of items, reset to the beginning
       if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
       } else {
@@ -75,61 +81,117 @@ const About = () => {
 
     animationFrame = requestAnimationFrame(scroll);
 
-    return () => cancelAnimationFrame(animationFrame);
+    const pause = () => {
+      isPaused = true;
+      cancelAnimationFrame(animationFrame);
+    };
+
+    const resume = () => {
+      isPaused = false;
+      animationFrame = requestAnimationFrame(scroll);
+    };
+
+    container.addEventListener("mousedown", pause);
+    container.addEventListener("touchstart", pause);
+
+    container.addEventListener("mouseup", resume);
+    container.addEventListener("mouseleave", resume);
+    container.addEventListener("touchend", resume);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      container.removeEventListener("mousedown", pause);
+      container.removeEventListener("touchstart", pause);
+      container.removeEventListener("mouseup", resume);
+      container.removeEventListener("mouseleave", resume);
+      container.removeEventListener("touchend", resume);
+    };
   }, []);
 
+  // Mouse Drag
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    isDown = true;
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const container = scrollRef.current;
+    if (!isDown || !container) return;
+
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    container.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    isDown = false;
+  };
+
   return (
-    <section id="about" className="py-24 relative" style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+    <section
+      id="about"
+      className="py-24 relative"
+      style={{
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="absolute inset-0 bg-[#faf6ef]/90"></div>
+
       <div className="container relative z-10">
 
-        {/* 🔥 ABOUT TEXT */}
+        {/* TEXT */}
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm uppercase  font-bold tracking-[0.3em] text-accent">
+          <p className="text-sm uppercase font-bold tracking-[0.3em] text-red-600">
             About Jatra
           </p>
 
-          <h2 className="mt-4 text-4xl font-semibold md:text-5xl leading-tight">
+          <h2 className="mt-4 text-4xl font-semibold md:text-5xl">
             Jatra – Back to the Roots of Uttarakhand
           </h2>
 
-          <p className="mt-6 text-lg text-muted-foreground leading-8">
-            Jatra reconnects people with Uttarakhand’s roots and promotes pride in
-            heritage, traditions, and lifestyle through a cultural and adventure-driven festival.
+          <p className="mt-6 text-lg text-muted-foreground">
+            Jatra reconnects people with Uttarakhand’s roots through culture and adventure.
           </p>
         </div>
 
         {/* SLIDER */}
-        <div className="mt-16 relative">
-          <p className="text-center text-sm uppercase tracking-[0.3em] text-accent mb-8">
+        <div className="mt-16">
+          <p className="text-center text-sm uppercase tracking-[0.3em] text-red-600 mb-8">
             Key Highlights of Jatra
           </p>
 
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-hidden pointer-events-none"
+            className="flex gap-6 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             {[...features, ...features].map((item, i) => (
               <div
                 key={i}
-                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border border-border/50 bg-white/90 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="min-w-[280px] md:min-w-[320px] flex-shrink-0 rounded-2xl border bg-white/90 p-6 shadow-sm hover:shadow-lg transition"
               >
-                {/* COLOR BAR */}
                 <div
                   className="h-1 w-12 mb-4 rounded-full"
                   style={{ background: `hsl(var(--${item.color}))` }}
                 />
 
-                {/* TITLE */}
                 <h3
-                  className="text-lg font-semibold break-words"
+                  className="text-lg font-semibold"
                   style={{ color: `hsl(var(--${item.color}))` }}
                 >
                   {item.title}
                 </h3>
 
-                {/* DESCRIPTION */}
-                <p className="mt-2 text-sm text-muted-foreground leading-6 break-words">
+                <p className="mt-2 text-sm text-muted-foreground">
                   {item.desc}
                 </p>
               </div>
@@ -137,43 +199,19 @@ const About = () => {
           </div>
         </div>
 
-        {/* 🔥 PILLARS */}
-        <div className="mt-20">
-          <p className="text-center text-sm uppercase tracking-[0.3em] text-accent">
-            The Four Pillars of Jatra
-          </p>
+        {/* PILLARS */}
+        <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {pillars.map(({ icon: Icon, color, title, desc, img }) => (
+            <div key={title} className="relative rounded-2xl overflow-hidden">
+              <img src={img} className="h-80 w-full object-cover" />
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {pillars.map(({ icon: Icon, color, title, desc, img }) => (
-              <div
-                key={title}
-                className="group relative overflow-hidden rounded-2xl shadow-md"
-              >
-                <img
-                  src={img}
-                  alt={title}
-                  loading="lazy"
-                  className="h-80 w-full object-cover transition duration-500 group-hover:scale-105"
-                />
-
-                <div className="absolute inset-0 bg-black/50 p-6 flex flex-col justify-end">
-                  <div
-                    className="mb-3 flex h-10 w-10 items-center justify-center rounded-full"
-                    style={{ background: `hsl(var(--${color}) / 0.2)` }}
-                  >
-                    <Icon   size={20} style={{ color: `hsl(var(--${color}))` }}></Icon>
-                  </div>
-
-                  <h3 className="text-xl font-semibold text-white">
-                    {title}
-                  </h3>
-                  <p className="mt-1 text-sm text-white/80">
-                    {desc}
-                  </p>
-                </div>
+              <div className="absolute inset-0 bg-black/50 p-6 flex flex-col justify-end">
+                <Icon size={20} style={{ color: `hsl(var(--${color}))` }} />
+                <h3 className="text-xl text-white">{title}</h3>
+                <p className="text-sm text-white/80">{desc}</p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
       </div>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
 // --- Asset Imports based on your folder structure ---
-import day1Img from '../assets/events/day1-aipan.jpg';
-import day2Img from '../assets/events/day2-competitions.jpg';
-import day3Img from '../assets/events/day3-stage.jpg';
-import day4Img from '../assets/events/day4-jhoda.jpg';
-import day5Img from '../assets/events/day5-finale.jpg';
+import day1Img from '../assets/events/ev1b.jpg';
+import day2Img from '../assets/events/ev3b.jpg';
+import day3Img from '../assets/events/ev4b.jpg';
+import day4Img from '../assets/events/ev5b.jpg';
+import day5Img from '../assets/events/ev2b.jpg';
 import jatraLogo from '../assets/jatra-logo.png';
 import fallbackBg from '../assets/KASAR-BG-WEB.png';
 
@@ -46,16 +46,17 @@ const festivalData = [
     mainBgImage: day1Img,
     thumbImage: day1Img,
     events: [
-      "Morning Pooja at Kasar Devi Temple with Core Team",
-      "Grand Opening: Jatra – The Beginning (Local People, Choliya, MTB, Paragliders, Volunteers)",
-      "Mangal & Shakuna Geet",
-      "Aiming for World Record : Grand Aipan Creation",
-      "Para trails and heats - 3PM ONWARDS",
-      "Aipan Competition Begins",
-      "Photography & Reel Competitions (ongoing, results Day 4)",
-      "Panel Discussion: “Jatra Festival — Why?”",
-      "Kamla Devi Performance",
-      "Aipan Results & Prize Distribution"
+      // "Morning Pooja at Kasar Devi Temple with Core Team",
+      // "Grand Opening: Jatra – The Beginning (Local People, Choliya, MTB, Paragliders, Volunteers)",
+      // "Mangal & Shakuna Geet",
+      // "Aiming for World Record : Grand Aipan Creation",
+      // "Para trails and heats - 3PM ONWARDS",
+      // "Aipan Competition Begins",
+      // "Photography & Reel Competitions (ongoing, results Day 4)",
+      // "Panel Discussion: “Jatra Festival — Why?”",
+      // "Kamla Devi Performance",
+      // "Aipan Results & Prize Distribution"
+      "Stay tuned—details dropping soon"
     ]
   },
   {
@@ -66,13 +67,14 @@ const festivalData = [
     mainBgImage: day2Img,
     thumbImage: day2Img,
     events: [
-      "MTB Race (para stdby) - 8:30AM ONWARDS",
-      "Culinary Competition",
-      "Painting Competition",
-      "Fashion Show Competition",
-      "Panel Discussion – Fashion: Modern + Traditional",
-      "Evening: Upreti Sisters Live Show",
-      "Results & Prize Announcement of the Day's Competitions"
+      // "MTB Race (para stdby) - 8:30AM ONWARDS",
+      // "Culinary Competition",
+      // "Painting Competition",
+      // "Fashion Show Competition",
+      // "Panel Discussion – Fashion: Modern + Traditional",
+      // "Evening: Upreti Sisters Live Show",
+      // "Results & Prize Announcement of the Day's Competitions"
+       "Stay tuned—details dropping soon"
     ]
   },
   {
@@ -83,14 +85,15 @@ const festivalData = [
     mainBgImage: day3Img,
     thumbImage: day3Img,
     events: [
-      "Trail running (MTB stdby) - 8:30AM ONWARDS",
-      "Sustainable Craft Competition promoting eco friendly innovation",
-      "Open Stage for performers to showcase music, poetry, and talent",
-      "Stand-up featuring Shiromani Pant",
-      "Haldwani Wali Aunty (Rashi Joshi)",
-      "Folk Performances by Basanti Devi",
-      "Evening by Lalit Mohan Joshi or Digvijay",
-      "Announcement of competition results"
+      // "Trail running (MTB stdby) - 8:30AM ONWARDS",
+      // "Sustainable Craft Competition promoting eco friendly innovation",
+      // "Open Stage for performers to showcase music, poetry, and talent",
+      // "Stand-up featuring Shiromani Pant",
+      // "Haldwani Wali Aunty (Rashi Joshi)",
+      // "Folk Performances by Basanti Devi",
+      // "Evening by Lalit Mohan Joshi or Digvijay",
+      // "Announcement of competition results"
+       "Stay tuned—details dropping soon"
     ]
   },
   {
@@ -101,12 +104,13 @@ const festivalData = [
     mainBgImage: day4Img,
     thumbImage: day4Img,
     events: [
-      "Half Marathon, Para gliding finals (trail stdby) - 6:30AM ONWARDS",
-      "Aiming for World Record : Jhoda Chanchari Gathering with Live Music by Shiromani Pant",
-      "Refreshments",
-      "Panel Discussion: “Lok Nritya”",
-      "Photography & Reel Making Competition Results",
-      "Evening: Devasthali Dance Performance"
+      // "Half Marathon, Para gliding finals (trail stdby) - 6:30AM ONWARDS",
+      // "Aiming for World Record : Jhoda Chanchari Gathering with Live Music by Shiromani Pant",
+      // "Refreshments",
+      // "Panel Discussion: “Lok Nritya”",
+      // "Photography & Reel Making Competition Results",
+      // "Evening: Devasthali Dance Performance"
+       "Stay tuned—details dropping soon"
     ]
   },
   {
@@ -117,14 +121,15 @@ const festivalData = [
     mainBgImage: day5Img,
     thumbImage: day5Img,
     events: [
-      "Tug of War – Male, Female & Children Categories",
-      "Dhol Samvad – Cultural Showcase",
-      "Aiming for World Record : Creating Pichodi with maximum people parcipation",
-      "Para display( para finals stdby) - 3PM ONWARDS",
-      "Janjati Cultural Performance",
-      "Introduction of the Organization – Devasthali X Kartavya karma",
-      "Vote of Thanks",
-      "Devasthali Live Music Performance (Closing Act)"
+    //   "Tug of War – Male, Female & Children Categories",
+    //   "Dhol Samvad – Cultural Showcase",
+    //   "Aiming for World Record : Creating Pichodi with maximum people parcipation",
+    //   "Para display( para finals stdby) - 3PM ONWARDS",
+    //   "Janjati Cultural Performance",
+    //   "Introduction of the Organization – Devasthali X Kartavya karma",
+    //   "Vote of Thanks",
+    //   "Devasthali Live Music Performance (Closing Act)"
+     "Stay tuned—details dropping soon"
     ]
   },
 ];
@@ -395,7 +400,7 @@ const BottomControls = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-  z-index: 100;
+  z-index: 20;
 
   @media (max-width: 768px) {
     bottom: 25px;
@@ -561,6 +566,7 @@ const EventItem = styled.li`
 const InteractiveJatraFestival: React.FC = () => {
   const [currentDestIndex, setCurrentDestIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
 
   // Auto-Slide Logic
   useEffect(() => {
@@ -573,6 +579,28 @@ const InteractiveJatraFestival: React.FC = () => {
     // Clear timer on unmount to prevent memory leaks
     return () => clearInterval(autoSlideTimer);
   }, [isModalOpen]);
+
+  useEffect(() => {
+    let scrollTimeout: number | undefined;
+
+    const handleScroll = () => {
+      setControlsVisible(false);
+      if (scrollTimeout) {
+        window.clearTimeout(scrollTimeout);
+      }
+      scrollTimeout = window.setTimeout(() => {
+        setControlsVisible(true);
+      }, 180);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        window.clearTimeout(scrollTimeout);
+      }
+    };
+  }, []);
 
   // Arrow Handlers
   const handleNext = () => {
@@ -622,7 +650,14 @@ const InteractiveJatraFestival: React.FC = () => {
         </MainContent>
 
         {/* --- Bottom Controls (Now with Arrows) --- */}
-        <BottomControls>
+        <BottomControls
+          style={{
+            opacity: controlsVisible ? 1 : 0,
+            pointerEvents: controlsVisible ? 'auto' : 'none',
+            transform: controlsVisible ? 'translateY(0)' : 'translateY(10px)',
+            transition: 'opacity 180ms ease, transform 180ms ease',
+          }}
+        >
           <ArrowButton onClick={handlePrev}>❮</ArrowButton>
           <SliderIndicators>
             {festivalData.map((_, index) => (
