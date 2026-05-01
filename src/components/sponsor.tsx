@@ -202,6 +202,7 @@ const SponsorPage: React.FC = () => {
             <LogoText>JATRA <span>FESTIVAL</span></LogoText>
             <MainHeading>Partner With Jatra</MainHeading>
             <SubHeading>Be part of a cultural revival. Let's create something extraordinary together.</SubHeading>
+             <img src="/src/assets/jatra-wordmark.png"></img> 
           </LeftContent>
         </LeftPanel>
 
@@ -210,7 +211,8 @@ const SponsorPage: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <FormHeader>
                 <FormTitle>Join the Movement</FormTitle>
-                <FormSubtitle>Tell us how you want to collaborate with Jatra.</FormSubtitle>
+                <FormSubtitle>Tell us how you want to collaborate with Jatra.
+                </FormSubtitle>
               </FormHeader>
 
               <FormSection>
