@@ -33,23 +33,28 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-8 md:top-14 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
           scrolled
             ? pastHero
-              ? "bg-background/95 border-b border-border/70 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl"
-              : "border-b border-white/10 bg-slate-950/40 backdrop-blur-md"
-            : "bg-black/40 backdrop-blur-sm md:bg-black/20"
+              ? "top-0 bg-background/95 border-b border-border/70 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl"
+              : "top-0 border-b border-white/10 bg-slate-950/40 backdrop-blur-md"
+            : "top-8 md:top-14 bg-black/40 backdrop-blur-sm md:bg-black/20"
         }`}
       >
-        <div className="container flex items-center justify-between py-3 md:py-5">
+        {/* UPDATED: Dynamic padding that shrinks when scrolled */}
+        <div className={`container flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "py-2 md:py-3" : "py-3 md:py-5"
+        }`}>
           <div className="flex items-center">
+            {/* UPDATED: Dynamic logo height that shrinks when scrolled */}
             <img 
               src={partnerLogo} 
               alt="Devasthali x Kartavyakarma" 
-              className="h-8 md:h-12 w-auto object-contain"
+              className={`w-auto object-contain transition-all duration-300 ${
+                scrolled ? "h-10 md:h-12" : "h-14 md:h-20"
+              }`}
             />
-          </div>
-
+          </div> 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-12">
             {links.map((link) => (
@@ -97,7 +102,7 @@ const Navbar = () => {
           <img 
             src={partnerLogo} 
             alt="Logo" 
-            className="h-16 w-auto object-contain mb-8"
+            className="h-24 w-auto object-contain mb-8"
           />
 
           {links.map((link) => (

@@ -1,694 +1,149 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import React from 'react';
+import { Landmark, Mountain, ArrowRight } from 'lucide-react';
 
-// --- Asset Imports based on your folder structure ---
-import day1Img from '../assets/events/ev1b.jpg';
-import day2Img from '../assets/events/ev3b.jpg';
-import day3Img from '../assets/events/ev4b.jpg';
-import day4Img from '../assets/events/ev5b.jpg';
-import day5Img from '../assets/events/ev2b.jpg';
-import jatraLogo from '../assets/jatra-logo.png';
-import fallbackBg from '../assets/KASAR-BG-WEB.png';
+// Import local background images from assets
+import culturalBg from "@/assets/Curtural_activity.png";
+import adventureBg from "@/assets/Adventure_activity.png";
 
-// --- Official Color Palette ---
-const colors = {
-  primaryRed: '#ff3600',
-  activeYellow: '#ffcc00', 
-  primaryBlue: '#0087d9',  
-  primaryDarkBlue: '#00568b', 
-  textLight: '#ffffff',
-  textDark: '#1a1a1a',
-};
-
-// --- Animations ---
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const backgroundFade = keyframes`
-  from { opacity: 0.7; }
-  to { opacity: 1; }
-`;
-
-const slideUp = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-// --- Festival Data Structure ---
-const festivalData = [
-  {
-    id: 0,
-    subtitle: "Day 1",
-    title: "GRAND OPENING",
-    description: "Jatra – The Beginning. Morning Pooja at Kasar Devi, Grand Aipan Creation, and competitions kickoff.",
-    mainBgImage: day1Img,
-    thumbImage: day1Img,
-    events: [
-      // "Morning Pooja at Kasar Devi Temple with Core Team",
-      // "Grand Opening: Jatra – The Beginning (Local People, Choliya, MTB, Paragliders, Volunteers)",
-      // "Mangal & Shakuna Geet",
-      // "Aiming for World Record : Grand Aipan Creation",
-      // "Para trails and heats - 3PM ONWARDS",
-      // "Aipan Competition Begins",
-      // "Photography & Reel Competitions (ongoing, results Day 4)",
-      // "Panel Discussion: “Jatra Festival — Why?”",
-      // "Kamla Devi Performance",
-      // "Aipan Results & Prize Distribution"
-      "Stay tuned—details dropping soon"
-    ]
-  },
-  {
-    id: 1,
-    subtitle: "Day 2",
-    title: "COMPETITIONS DAY",
-    description: "A day filled with adrenaline and creativity. Featuring MTB races, culinary arts, and the Upreti Sisters Live Show.",
-    mainBgImage: day2Img,
-    thumbImage: day2Img,
-    events: [
-      // "MTB Race (para stdby) - 8:30AM ONWARDS",
-      // "Culinary Competition",
-      // "Painting Competition",
-      // "Fashion Show Competition",
-      // "Panel Discussion – Fashion: Modern + Traditional",
-      // "Evening: Upreti Sisters Live Show",
-      // "Results & Prize Announcement of the Day's Competitions"
-       "Stay tuned—details dropping soon"
-    ]
-  },
-  {
-    id: 2,
-    subtitle: "Day 3",
-    title: "SUSTAINABILITY & STAGE",
-    description: "Celebrating eco-friendly innovation and local talent with trail running, open stages, and folk performances.",
-    mainBgImage: day3Img,
-    thumbImage: day3Img,
-    events: [
-      // "Trail running (MTB stdby) - 8:30AM ONWARDS",
-      // "Sustainable Craft Competition promoting eco friendly innovation",
-      // "Open Stage for performers to showcase music, poetry, and talent",
-      // "Stand-up featuring Shiromani Pant",
-      // "Haldwani Wali Aunty (Rashi Joshi)",
-      // "Folk Performances by Basanti Devi",
-      // "Evening by Lalit Mohan Joshi or Digvijay",
-      // "Announcement of competition results"
-       "Stay tuned—details dropping soon"
-    ]
-  },
-  {
-    id: 3,
-    subtitle: "Day 4",
-    title: "JHODA CHANCHARI",
-    description: "Aiming for a World Record with maximum public participation in the Jhoda Chanchari gathering.",
-    mainBgImage: day4Img,
-    thumbImage: day4Img,
-    events: [
-      // "Half Marathon, Para gliding finals (trail stdby) - 6:30AM ONWARDS",
-      // "Aiming for World Record : Jhoda Chanchari Gathering with Live Music by Shiromani Pant",
-      // "Refreshments",
-      // "Panel Discussion: “Lok Nritya”",
-      // "Photography & Reel Making Competition Results",
-      // "Evening: Devasthali Dance Performance"
-       "Stay tuned—details dropping soon"
-    ]
-  },
-  {
-    id: 4,
-    subtitle: "Day 5",
-    title: "GRAND FINALE",
-    description: "The spectacular conclusion featuring Tug of War, Dhol Samvad, and a record-breaking Pichodi creation.",
-    mainBgImage: day5Img,
-    thumbImage: day5Img,
-    events: [
-    //   "Tug of War – Male, Female & Children Categories",
-    //   "Dhol Samvad – Cultural Showcase",
-    //   "Aiming for World Record : Creating Pichodi with maximum people parcipation",
-    //   "Para display( para finals stdby) - 3PM ONWARDS",
-    //   "Janjati Cultural Performance",
-    //   "Introduction of the Organization – Devasthali X Kartavya karma",
-    //   "Vote of Thanks",
-    //   "Devasthali Live Music Performance (Closing Act)"
-     "Stay tuned—details dropping soon"
-    ]
-  },
-];
-
-// --- Styled Components ---
-
-const PageContainer = styled.div<{ $bgImage: string }>`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  background-image: url(${props => props.$bgImage || fallbackBg});
-  background-size: cover;
-  background-position: center;
-  color: ${colors.textLight};
-  font-family: 'Open Sans', sans-serif;
-  overflow: hidden;
-  transition: background-image 0.8s ease-in-out;
-  animation: ${backgroundFade} 1s ease-in-out;
-`;
-
-const PageOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); 
-`;
-
-// --- Header ---
-const Header = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 60px;
-  background-color: transparent;
-  z-index: 100;
-
-  @media (max-width: 768px) {
-    padding: 15px 20px;
-  }
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: ${colors.activeYellow};
-`;
-
-const LogoIcon = styled.img`
-  height: 35px;
-  margin-right: 15px;
-  object-fit: contain;
-`;
-
-const NavLinks = styled.nav`
-  display: flex;
-  gap: 30px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-
-  @media (max-width: 768px) {
-    display: none; /* Hidden on mobile to save space */
-  }
-`;
-
-const NavLink = styled.a`
-  color: ${colors.textLight};
-  text-decoration: none;
-  transition: color 0.3s;
-  &:hover {
-    color: ${colors.activeYellow};
-  }
-`;
-
-// --- Main Content ---
-const MainContent = styled.main`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end; 
-  padding: 100px 60px 140px; 
-  height: 100vh;
-  z-index: 10;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 80px 20px 110px;
-    text-align: center;
-  }
-`;
-
-const HeroContent = styled.div`
-  flex: 1;
-  max-width: 45%;
-  animation: ${fadeIn} 0.8s ease-in-out;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-const ContentDivider = styled.div`
-  width: 40px;
-  height: 3px;
-  background-color: ${colors.activeYellow};
-  margin-bottom: 20px;
-`;
-
-const SubtitleDetail = styled.div`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.activeYellow};
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  letter-spacing: 2px;
-`;
-
-const Headline = styled.h1`
-  font-size: 60px;
-  font-weight: 900;
-  line-height: 1.1;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-
-  @media (max-width: 768px) {
-    font-size: 42px;
-  }
-`;
-
-const Description = styled.p`
-  font-size: 14px;
-  color: #eeeeee;
-  line-height: 1.6;
-  margin-bottom: 30px;
-  max-width: 90%;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    font-size: 13px;
-  }
-`;
-
-const DiscoveryButton = styled.button`
-  background: ${colors.primaryRed};
-  border: 1px solid ${colors.primaryRed};
-  border-radius: 30px;
-  padding: 12px 30px;
-  color: ${colors.textLight};
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 54, 0, 0.4);
-
-  &:hover {
-    background: transparent;
-    color: ${colors.primaryRed};
-  }
-`;
-
-// --- Slider ---
-const DestinationsSlider = styled.div`
-  display: flex;
-  gap: 20px;
-  padding: 40px 20px; 
-  overflow-x: auto;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-
-  @media (max-width: 768px) {
-    width: 100vw;
-    padding: 20px;
-    scroll-snap-type: x mandatory; /* Enables smooth native swiping */
-  }
-`;
-
-const DestinationCard = styled.div<{ $active?: boolean }>`
-  position: relative;
-  width: 150px;
-  height: 240px;
-  flex-shrink: 0; /* CRITICAL FIX: prevents horizontal squishing */
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  border: 2px solid transparent;
-
-  ${props => props.$active && css`
-    transform: scale(1.15);
-    box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
-    border-color: ${colors.activeYellow};
-    z-index: 5;
-  `}
-
-  @media (max-width: 768px) {
-    width: 140px;
-    height: 200px;
-    scroll-snap-align: center; /* Snaps the card cleanly into view when sliding */
-    ${props => props.$active && css`
-      transform: scale(1.08); /* Slightly smaller scale on mobile */
-    `}
-  }
-`;
-
-const CardImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const CardOverlay = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60%;
-  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
-`;
-
-const CardContent = styled.div`
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  width: calc(100% - 30px);
-`;
-
-const CardSubtitle = styled.div`
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: ${colors.activeYellow};
-  margin-bottom: 4px;
-`;
-
-const CardTitle = styled.h3`
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin: 0;
-  line-height: 1.2;
-`;
-
-// --- Bottom Controls ---
-const BottomControls = styled.div`
-  position: absolute;
-  bottom: 60px;
-  right: 60px;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  z-index: 20;
-
-  @media (max-width: 768px) {
-    bottom: 25px;
-    right: 50%;
-    transform: translateX(50%); /* Centers perfectly on mobile */
-    width: 100%;
-    justify-content: center;
-    padding: 0 20px;
-    gap: 15px;
-  }
-`;
-
-const ArrowButton = styled.button`
-  background: rgba(0,0,0,0.4);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
-  font-size: 14px;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: ${colors.activeYellow};
-    color: ${colors.textDark};
-    border-color: ${colors.activeYellow};
-  }
-
-  @media (max-width: 768px) {
-    width: 30px;
-    height: 30px;
-  }
-`;
-
-const SliderIndicators = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
-
-const IndicatorLine = styled.div<{ $active?: boolean }>`
-  width: ${props => props.$active ? '24px' : '12px'};
-  height: 3px;
-  background-color: ${props => props.$active ? colors.activeYellow : 'rgba(255, 255, 255, 0.3)'};
-  transition: width 0.3s ease, background-color 0.3s ease;
-  border-radius: 2px;
-`;
-
-const SlideNumber = styled.div`
-  font-size: 28px;
-  font-weight: 900;
-  color: ${colors.textLight};
-
-  @media (max-width: 768px) {
-    font-size: 22px;
-  }
-`;
-
-// --- Modal Popup ---
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-  animation: ${fadeIn} 0.3s ease-out;
-`;
-
-const ModalContent = styled.div`
-  background-color: ${colors.textDark};
-  border-radius: 16px;
-  width: 100%;
-  max-width: 650px;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  border: 1px solid #333;
-  animation: ${slideUp} 0.4s ease-out;
-
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: ${colors.textDark}; }
-  &::-webkit-scrollbar-thumb { background: ${colors.activeYellow}; border-radius: 3px; }
-`;
-
-const ModalHeader = styled.div`
-  padding: 25px 30px;
-  border-bottom: 1px solid #333;
-  position: sticky;
-  top: 0;
-  background-color: ${colors.textDark};
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    padding: 15px 20px;
-  }
-`;
-
-const ModalTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 800;
-  color: ${colors.activeYellow};
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-
-  @media (max-width: 768px) { font-size: 18px; }
-`;
-
-const CloseIcon = styled.button`
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 28px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  &:hover { color: ${colors.primaryRed}; }
-`;
-
-const ModalBody = styled.div`
-  padding: 30px;
-  @media (max-width: 768px) { padding: 20px; }
-`;
-
-const EventList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const EventItem = styled.li`
-  position: relative;
-  padding-left: 25px;
-  margin-bottom: 15px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: #ddd;
-
-  &::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: ${colors.primaryBlue};
-    font-weight: bold;
-  }
-`;
-
-// --- Main Page Component ---
-const InteractiveJatraFestival: React.FC = () => {
-  const [currentDestIndex, setCurrentDestIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [controlsVisible, setControlsVisible] = useState(true);
-
-  // Auto-Slide Logic
-  useEffect(() => {
-    if (isModalOpen) return;
-
-    const autoSlideTimer = setInterval(() => {
-      setCurrentDestIndex((prev) => (prev + 1) % festivalData.length);
-    }, 5000); // Transitions every 5 seconds
-    
-    // Clear timer on unmount to prevent memory leaks
-    return () => clearInterval(autoSlideTimer);
-  }, [isModalOpen]);
-
-  useEffect(() => {
-    let scrollTimeout: number | undefined;
-
-    const handleScroll = () => {
-      setControlsVisible(false);
-      if (scrollTimeout) {
-        window.clearTimeout(scrollTimeout);
-      }
-      scrollTimeout = window.setTimeout(() => {
-        setControlsVisible(true);
-      }, 180);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout) {
-        window.clearTimeout(scrollTimeout);
-      }
-    };
-  }, []);
-
-  // Arrow Handlers
-  const handleNext = () => {
-    setCurrentDestIndex((prev) => (prev + 1) % festivalData.length);
-  };
-  
-  const handlePrev = () => {
-    setCurrentDestIndex((prev) => (prev === 0 ? festivalData.length - 1 : prev - 1));
-  };
-
-  const currentData = festivalData[currentDestIndex];
-
+const ExperienceSelector = () => {
   return (
-    <div id="events" className="scroll-mt-[100px]">
-      <PageContainer $bgImage={currentData.mainBgImage}>
-        <PageOverlay />
+    // 'justify-center' added to ensure it vertically centers and fits perfectly in the window frame
+    <div className="min-h-screen bg-[#0d1117] text-white flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative z-0 overflow-hidden">
+      
+      {/* Header Section */}
+      <div className="text-center mb-8 z-10 flex flex-col items-center">
+        {/* Logo Area */}
+        <div className="mb-4 flex flex-col items-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-widest text-white mb-2 font-serif">
+            {/* If you prefer text logo instead of image, you can revert this to the text 'जात्रा' */}
+            <img src="/src/assets/jatra-wordmark.png" width={350} height={380} alt="Jatra Wordmark" />
+          </h1>
+        </div>
 
-        {/* --- Main Hero Content --- */}
-        <MainContent>
-          <HeroContent key={currentDestIndex}>
-            <ContentDivider />
-            <SubtitleDetail>{currentData.subtitle}</SubtitleDetail>
-            <Headline>{currentData.title}</Headline>
-            <Description>{currentData.description}</Description>
-            <DiscoveryButton onClick={() => setIsModalOpen(true)}>
-              VIEW DAY SCHEDULE
-            </DiscoveryButton>
-          </HeroContent>
+        {/* Title Area */}
+        <div className="flex items-center justify-center gap-4 mb-3">
+          <div className="hidden sm:flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-yellow-600 rotate-45"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-red-600 rotate-45"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-green-600 rotate-45"></div>
+            <div className="w-8 h-px bg-gray-600"></div>
+          </div>
+          
+          <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight font-sans">
+            Choose Your <span className="text-[#fca311]">Experience</span>
+          </h2>
+          
+          <div className="hidden sm:flex items-center gap-2">
+            <div className="w-8 h-px bg-gray-600"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-green-600 rotate-45"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-red-600 rotate-45"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-yellow-600 rotate-45"></div>
+          </div>
+        </div>
+        
+        <p className="text-gray-300 text-sm md:text-base max-w-2xl">
+          Be a part of Jatra 2026. Celebrate culture, embrace adventure.
+        </p>
+      </div>
 
-          {/* --- Interactive Slider --- */}
-          <DestinationsSlider>
-            {festivalData.map((dest, index) => (
-              <DestinationCard 
-                key={dest.id}
-                $active={index === currentDestIndex}
-                onClick={() => setCurrentDestIndex(index)}
-              >
-                <CardImage src={dest.thumbImage} alt={dest.title} />
-                <CardOverlay />
-                <CardContent>
-                  <CardSubtitle>{dest.subtitle}</CardSubtitle>
-                  <CardTitle>{dest.title}</CardTitle>
-                </CardContent>
-              </DestinationCard>
-            ))}
-          </DestinationsSlider>
-        </MainContent>
+      {/* Cards Section */}
+      <div className="relative w-full max-w-5xl flex flex-col md:flex-row gap-6 md:gap-8 z-10">
+        
+        {/* Cultural Activities Card */}
+        <div className="flex-1 relative rounded-xl border border-[#fca311] overflow-hidden group h-[450px] md:h-[480px] flex flex-col items-center justify-end text-center p-8 transition-transform duration-300 hover:scale-[1.02] shadow-lg shadow-[#fca311]/10">
+          
+          {/* Background Image: using imported local asset */}
+          <div 
+            className="absolute inset-0 bg-cover bg-top z-0 transition-transform duration-700 group-hover:scale-110"
+            style={{ backgroundImage: `url(${culturalBg})` }}
+          ></div>
+          
+          {/* Overlay: Dark at bottom, transparent at top to show image perfectly */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-[#0d1117]/90 to-transparent z-0"></div>
 
-        {/* --- Bottom Controls (Now with Arrows) --- */}
-        <BottomControls
-          style={{
-            opacity: controlsVisible ? 1 : 0,
-            pointerEvents: controlsVisible ? 'auto' : 'none',
-            transform: controlsVisible ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'opacity 180ms ease, transform 180ms ease',
-          }}
-        >
-          <ArrowButton onClick={handlePrev}>❮</ArrowButton>
-          <SliderIndicators>
-            {festivalData.map((_, index) => (
-              <IndicatorLine key={index} $active={index === currentDestIndex} />
-            ))}
-          </SliderIndicators>
-          <ArrowButton onClick={handleNext}>❯</ArrowButton>
-          <SlideNumber>0{currentDestIndex + 1}</SlideNumber>
-        </BottomControls>
+          {/* Card Content */}
+          <div className="relative z-10 flex flex-col items-center w-full">
+            <div className="w-16 h-16 rounded-full border border-[#fca311] flex items-center justify-center mb-4 bg-[#0d1117]/50 backdrop-blur-sm">
+              <Landmark className="w-8 h-8 text-[#fca311]" />
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 leading-tight">
+              Cultural<br />Activities
+            </h3>
+            
+            <div className="w-2.5 h-2.5 border border-[#fca311] rotate-45 mb-4"></div>
+            
+            <p className="text-gray-300 text-xs md:text-sm leading-relaxed mb-8 max-w-[260px]">
+              Dive into the rich heritage of Uttarakhand.<br />
+              Experience folk music, dances, stories,<br />
+              traditional crafts, and more.
+            </p>
+            
+            {/* UPDATED: Converted button to anchor tag for new tab redirection. Update href to your actual route */}
+            <a 
+              href="/cultural-register" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-[#fca311] hover:bg-[#e08e0b] text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 transition-colors uppercase text-xs w-full max-w-[260px] justify-center cursor-pointer"
+            >
+              Register For Cultural Activities
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
 
-        {/* --- Modal Popup Component --- */}
-        {isModalOpen && (
-          <ModalOverlay onClick={() => setIsModalOpen(false)}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-              <ModalHeader>
-                <ModalTitle>{currentData.subtitle}: {currentData.title}</ModalTitle>
-                <CloseIcon onClick={() => setIsModalOpen(false)}>&times;</CloseIcon>
-              </ModalHeader>
-              <ModalBody>
-                <EventList>
-                  {currentData.events.map((event, i) => (
-                    <EventItem key={i}>{event}</EventItem>
-                  ))}
-                </EventList>
-              </ModalBody>
-            </ModalContent>
-          </ModalOverlay>
-        )}
-      </PageContainer>
+        {/* OR Divider */}
+        <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#0d1117] items-center justify-center font-bold text-sm border-2 shadow-lg"
+             style={{ borderLeftColor: '#fca311', borderBottomColor: '#fca311', borderRightColor: '#52b755', borderTopColor: '#52b755'}}>
+          OR
+        </div>
+
+        {/* Adventure Activities Card */}
+        <div className="flex-1 relative rounded-xl border border-[#52b755] overflow-hidden group h-[450px] md:h-[480px] flex flex-col items-center justify-end text-center p-8 transition-transform duration-300 hover:scale-[1.02] shadow-lg shadow-[#52b755]/10">
+          
+          {/* Background Image: using imported local asset */}
+          <div 
+            className="absolute inset-0 bg-cover bg-top z-0 transition-transform duration-700 group-hover:scale-110"
+            style={{ backgroundImage: `url(${adventureBg})` }}
+          ></div>
+          
+          {/* Overlay: Dark at bottom, transparent at top to show image perfectly */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-[#0d1117]/90 to-transparent z-0"></div>
+
+          {/* Card Content */}
+          <div className="relative z-10 flex flex-col items-center w-full">
+            <div className="w-16 h-16 rounded-full border border-[#52b755] flex items-center justify-center mb-4 bg-[#0d1117]/50 backdrop-blur-sm">
+              <Mountain className="w-8 h-8 text-white" />
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-bold uppercase mb-4 leading-tight">
+              Adventure<br />Activities
+            </h3>
+            
+            <div className="w-2.5 h-2.5 border border-[#52b755] rotate-45 mb-4"></div>
+            
+            <p className="text-gray-300 text-xs md:text-sm leading-relaxed mb-8 max-w-[260px]">
+              Fuel your spirit with adventure.<br />
+              From trekking and paragliding to cycling<br />
+              and camping – the mountains await!
+            </p>
+            
+            {/* UPDATED: Converted button to anchor tag for new tab redirection. Update href to your actual route */}
+            <a 
+              href="/adventure-register" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-[#52b755] hover:bg-[#439946] text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 transition-colors uppercase text-xs w-full max-w-[260px] justify-center cursor-pointer"
+            >
+              Register For Adventure Activities
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 };
 
-export default InteractiveJatraFestival;
+export default ExperienceSelector;

@@ -8,6 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Loader from "@/components/Loader"; // 👈 IMPORT LOADER
+import Register from "@/components/Register";
+import Culturereg from "@/components/culturereg";
+import Advreg from "@/components/advreg";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +44,9 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/cultural-register" element={<Culturereg />} />
+            <Route path="/adventure-register" element={<Advreg />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
