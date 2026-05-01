@@ -14,10 +14,10 @@ const ExperienceSelector = () => {
       <div className="text-center mb-8 z-10 flex flex-col items-center">
         {/* Logo Area */}
         <div className="mb-4 flex flex-col items-center">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-widest text-white mb-2 font-serif">
+          <h2 className="text-5xl md:text-6xl font-extrabold tracking-widest text-white mb-2 font-serif">
             {/* If you prefer text logo instead of image, you can revert this to the text 'जात्रा' */}
-            <img src="/src/assets/jatra-wordmark.png" width={350} height={380} alt="Jatra Wordmark" />
-          </h1>
+            <img src="/src/assets/jatra-wordmark.png" width={350} height={310} alt="Jatra Wordmark" />
+          </h2>
         </div>
 
         {/* Title Area */}
