@@ -16,7 +16,7 @@ const EventRegistration = () => {
   
   const [formData, setFormData] = useState({
     fullName: '',
-    email: '', // Added Email
+    email: '',
     gender: '',
     phone: '',
     city: '',
@@ -26,13 +26,7 @@ const EventRegistration = () => {
   });
 
   const [errors, setErrors] = useState({
-    fullName: '',
-    email: '', // Added Email
-    gender: '',
-    phone: '',
-    city: '',
-    age: '',
-    agreed: ''
+    fullName: '', email: '', gender: '', phone: '', city: '', age: '', agreed: ''
   });
 
   const categories = [
@@ -114,17 +108,13 @@ const EventRegistration = () => {
     }
 
     setIsSubmitting(true);
-    const payload = { ...formData, registrationId: uniqueId };
-
     try {
       const response = await fetch('https://jatrafestival.in/api/adventure_register.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...formData, registrationId: uniqueId })
       });
-
       const result = await response.json();
-
       if (result.success) {
         alert(`Registration Successful!\nActivity: ${formData.activityType}\nID: ${uniqueId}`);
         setFormData({ fullName: '', email: '', gender: '', phone: '', city: '', age: '', activityType: formData.activityType, activityCode: formData.activityCode });
@@ -133,7 +123,6 @@ const EventRegistration = () => {
         alert('Registration failed. ' + (result.message || 'Please try again.'));
       }
     } catch (error) {
-      console.error('Submission error:', error);
       alert('Network error. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -144,18 +133,43 @@ const EventRegistration = () => {
   const currentLogo = currentCategory ? currentCategory.logo : '/src/assets/jatra-logo.png';
 
   return (
-    <div className="min-h-screen bg-white flex flex-col font-sans relative">
-      
-      <header className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-       <img src="/src/assets/jatra-logo45.png" alt="Jatra Logo" className="h-40 w-auto" />
-          <div className="text-center">
-            <h5 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter uppercase ">
-                Adventure <span className="text-amber-500">Activities</span>
-            </h5>
-            <div className="h-1.5 w-24 bg-amber-500 mx-auto mt-2 rounded-full"></div>
-            </div>
-            <img src="/src/assets/devasthaliXkartavyakarma.png" alt="Devasthali x Kartavyakarma" className="h-20 w-auto" />
-      </header>
+    <div className="min-h-screen bg-white flex flex-col font-sans">
+      {/* Header - Mobile Optimized and Borderless */}
+      <div className="w-full bg-[#0f172a]">
+        <header className="w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-8">
+          
+          {/* Partner Logo - Removed container and border */}
+          <div className="w-full md:w-auto flex justify-center md:justify-start">
+            <img 
+              src="src/assets/devasthaliXkartavyakarma.png" 
+              alt="Devasthali Logo" 
+              width={80}
+              height={80}
+              loading="lazy"
+              className="h-16 md:h-20 w-auto object-contain" 
+            />
+          </div>
+          
+          {/* Title Section */}
+          <div className="text-center md:flex-grow">
+            <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
+              Adventure <span className="text-amber-500">Activities</span>
+            </h1>
+            <div className="h-1.5 w-32 bg-amber-500 mx-auto mt-3 rounded-full shadow-lg shadow-amber-500/20"></div>
+          </div>
+
+          {/* Jatra Wordmark - Removed container and border */}
+          <div className="w-full md:w-auto flex justify-center md:justify-end">
+            <img 
+              src="/src/assets/jatra-logo.png" 
+              alt="Jatra Wordmark" 
+              width={100}
+              height={100}
+              className="h-22 md:h-28 w-auto object-contain" 
+            />
+          </div>
+        </header>
+      </div>
 
       {/* Guidelines Modal */}
       {isModalOpen && (
@@ -246,7 +260,6 @@ const EventRegistration = () => {
                 </div>
               </div>
 
-              {/* Added Email Input */}
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-800">Email Address *</label>
                 <div className="relative">
@@ -347,7 +360,7 @@ const EventRegistration = () => {
       <footer className="bg-[#0f172a] py-8 border-t border-gray-800 flex flex-col items-center justify-center">
         <p className="text-[#fbab18] text-xs font-bold uppercase tracking-[0.2em] mb-4 text-center">Celebrate. Participate. Preserve.</p>
         <div className="flex justify-center w-full">
-          <img src={currentLogo} className="h-16 md:h-20 object-contain" alt="Current Activity Logo" />
+          <img src={currentLogo} width={80} height={80} className="h-16 md:h-20 object-contain" alt="Current Activity Logo" />
         </div>
       </footer>
     </div>

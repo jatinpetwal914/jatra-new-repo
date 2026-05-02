@@ -50,6 +50,7 @@ const HeroSection = () => {
           loop
           playsInline
           muted={isMuted}
+          preload="metadata"
           className="w-full h-full object-cover"
         >
           <source src={video} type="video/mp4" />
@@ -75,6 +76,8 @@ const HeroSection = () => {
               key={logoIndex}
               src={logos[logoIndex]}
               alt="Jatra Logo"
+              width={420}
+              height={140}
               initial={{ opacity: 0, scale: 0.9, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 1.1, y: -10 }}
