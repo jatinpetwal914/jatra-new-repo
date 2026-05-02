@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 import partnerLogo from "@/assets/devasthaliXkartavyakarma.png";
 
 const links = [
@@ -19,8 +20,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-      setPastHero(window.scrollY > Math.max(window.innerHeight - 220, 420));
+      setScrolled(window.scrollY > 20);
+      setPastHero(window.scrollY > Math.max(window.innerHeight - 100, 300));
     };
 
     onScroll();
@@ -33,50 +34,57 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed left-0 right-0 z-[100] transition-all duration-500 ease-in-out ${
           scrolled
             ? pastHero
-              ? "top-0 bg-background/95 border-b border-border/70 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl"
-              : "top-0 border-b border-white/10 bg-slate-950/40 backdrop-blur-md"
-            : "top-8 md:top-14 bg-black/40 backdrop-blur-sm md:bg-black/20"
+              ? "top-0 bg-background/95 border-b border-border/70 shadow-md backdrop-blur-xl"
+              : "top-0 border-b border-white/10 bg-slate-950/80 backdrop-blur-lg"
+            : "top-0 md:top-14 bg-black/40 backdrop-blur-sm md:bg-black/10"
         }`}
       >
-        {/* UPDATED: Dynamic padding that shrinks when scrolled */}
-        <div className={`container flex items-center justify-between transition-all duration-300 ${
-          scrolled ? "py-2 md:py-3" : "py-3 md:py-5"
+        {/* FIXED HEIGHT CONTAINER: Prevents "bulging" by locking the mobile height to h-16 or h-20 */}
+        <div className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "h-16 md:h-20" : "h-20 md:h-28"
         }`}>
+          
           <div className="flex items-center">
-            {/* UPDATED: Dynamic logo height that shrinks when scrolled */}
             <img 
               src={partnerLogo} 
-              alt="Devasthali x Kartavyakarma" 
+              alt="Partner Logos" 
+              /* Max-height is key here to keep the logo from expanding the navbar */
               className={`w-auto object-contain transition-all duration-300 ${
-                scrolled ? "h-10 md:h-12" : "h-14 md:h-20"
-              }`}
+                scrolled ? "h-10 md:h-12" : "h-12 md:h-16"
+              } max-w-[200px] md:max-w-none`}
             />
           </div> 
+
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-12">
+          <div className="hidden md:flex items-center gap-10">
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setActive(link.href)}
-                className={`relative text-sm font-semibold tracking-[0.25em] uppercase transition-smooth whitespace-nowrap ${
-                  pastHero ? "text-foreground/75 hover:text-foreground" : "text-white/90 hover:text-white"
+                className={`relative text-[10px] font-bold tracking-[0.3em] uppercase transition-all ${
+                  pastHero ? "text-foreground/80 hover:text-foreground" : "text-white/90 hover:text-white"
                 }`}
               >
                 {link.label}
                 {active === link.href && (
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-accent" />
+                  <motion.span 
+                    layoutId="underline" 
+                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full bg-[#FFB800]" 
+                  />
                 )}
               </a>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Larger and clearer */}
           <button 
-            className="md:hidden p-2 text-white" 
+            className={`md:hidden p-2 rounded-lg transition-colors ${
+              pastHero ? "text-foreground" : "text-white"
+            }`} 
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -87,13 +95,13 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 z-50 bg-background/98 backdrop-blur-2xl transition-all duration-500 md:hidden ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-[110] bg-background/98 backdrop-blur-3xl transition-all duration-500 md:hidden ${
+          isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-8">
+        <div className="flex flex-col items-center justify-center h-full gap-10">
           <button 
-            className="absolute top-8 right-6 p-2 text-foreground" 
+            className="absolute top-6 right-6 p-2 text-foreground" 
             onClick={toggleMenu}
           >
             <X size={32} />
@@ -102,7 +110,7 @@ const Navbar = () => {
           <img 
             src={partnerLogo} 
             alt="Logo" 
-            className="h-24 w-auto object-contain mb-8"
+            className="h-16 w-auto object-contain mb-4"
           />
 
           {links.map((link) => (
@@ -113,17 +121,11 @@ const Navbar = () => {
                 setActive(link.href);
                 setIsOpen(false);
               }}
-              className="text-2xl font-bold tracking-[0.15em] uppercase text-foreground/80 hover:text-accent transition-colors"
+              className="text-xl font-black tracking-[0.2em] uppercase text-foreground/80 hover:text-[#FFB800] transition-colors"
             >
               {link.label}
             </a>
           ))}
-          
-          <div className="mt-12 flex gap-6">
-            <div className="h-1 w-12 bg-accent rounded-full" />
-            <div className="h-1 w-12 bg-festival-blue rounded-full" />
-            <div className="h-1 w-12 bg-festival-green rounded-full" />
-          </div>
         </div>
       </div>
     </>
