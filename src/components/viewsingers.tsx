@@ -111,96 +111,119 @@ const AllGuestsPage = () => {
           </p>
         </div>
 
-        {/* Zig-Zag List Section */}
-        <div className="flex flex-col gap-24 md:gap-32">
-          {guestsData.map((guest, index) => {
-            const style = themes[guest.theme as keyof typeof themes];
-            const isEven = index % 2 === 0;
+        {/* Content Section Wrapped for Blur Management */}
+        <div className="relative">
+          
+          {/* ========================================================================= */}
+          {/* BLUR OVERLAY - TO REVEAL THE GUEST LIST, COMMENT OUT OR DELETE THIS BLOCK */}
+          {/* ========================================================================= */}
+          <div className="absolute inset-[-20px] z-50 backdrop-blur-xl bg-[#0d1117]/60 rounded-3xl">
+            <div className="sticky top-[30vh] mx-auto max-w-2xl p-8 md:p-12 text-center bg-[#0d1117]/80 border border-white/10 rounded-2xl shadow-2xl">
+              <h2 className="text-4xl md:text-5xl font-black uppercase text-white mb-6 tracking-widest">
+                Coming Soon
+              </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-[#8b5cf6] via-[#fca311] to-[#52b755] mx-auto mb-6"></div>
+              <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                Currently, the <span className="text-[#fca311] font-bold">Volunteer</span> and <span className="text-[#8b5cf6] font-bold">Competition</span> pages are open for registration. 
+                Stay tuned as we unveil our incredible lineup of artists!
+              </p>
+            </div>
+          </div>
+          {/* ========================================================================= */}
+          {/* END OF BLUR OVERLAY                                                       */}
+          {/* ========================================================================= */}
 
-            return (
-              <div 
-                key={guest.id} 
-                className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-10 md:gap-16 lg:gap-24`}
-              >
-                
-                {/* Artist Image Card */}
-                <div className="flex-shrink-0 relative group perspective">
-                  <article
-                    className={`relative w-[280px] h-[400px] overflow-hidden rounded-xl border-2 ${style.border} bg-[#0d1117] transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-${guest.theme}-500/20`}
-                  >
-                    {/* Background Image (Clear, no blur) */}
-                    <div 
-                      className="absolute inset-0 bg-cover bg-top z-0 transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${guest.img})` }}
-                    ></div>
+          {/* Zig-Zag List Section */}
+          <div className="flex flex-col gap-24 md:gap-32">
+            {guestsData.map((guest, index) => {
+              const style = themes[guest.theme as keyof typeof themes];
+              const isEven = index % 2 === 0;
 
-                    {/* Gradient Overlay for bottom text */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-[#0d1117]/60 to-transparent z-0"></div>
+              return (
+                <div 
+                  key={guest.id} 
+                  className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-10 md:gap-16 lg:gap-24`}
+                >
+                  
+                  {/* Artist Image Card */}
+                  <div className="flex-shrink-0 relative group perspective">
+                    <article
+                      className={`relative w-[280px] h-[400px] overflow-hidden rounded-xl border-2 ${style.border} bg-[#0d1117] transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-${guest.theme}-500/20`}
+                    >
+                      {/* Background Image (Clear, no blur) */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-top z-0 transition-transform duration-700 group-hover:scale-110"
+                        style={{ backgroundImage: `url(${guest.img})` }}
+                      ></div>
 
-                    {/* Name inside card */}
-                    <div className="relative z-10 flex flex-col items-center justify-end h-full w-full p-6 text-center">
-                      <h3 className="text-3xl font-black uppercase mb-2 leading-tight text-white drop-shadow-lg">
-                        {guest.name}
-                      </h3>
-                      <div className={`w-3 h-3 border-2 ${style.border} rotate-45 mb-2 bg-[#0d1117]`}></div>
-                    </div>
-                  </article>
-                </div>
+                      {/* Gradient Overlay for bottom text */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-[#0d1117]/60 to-transparent z-0"></div>
 
-                {/* Artist Details & Schedule */}
-                <div className="flex-1 flex flex-col justify-center text-center md:text-left">
-                  <div className={`text-sm font-black uppercase tracking-[0.3em] mb-3 ${style.text}`}>
-                    {guest.role}
+                      {/* Name inside card */}
+                      <div className="relative z-10 flex flex-col items-center justify-end h-full w-full p-6 text-center">
+                        <h3 className="text-3xl font-black uppercase mb-2 leading-tight text-white drop-shadow-lg">
+                          {guest.name}
+                        </h3>
+                        <div className={`w-3 h-3 border-2 ${style.border} rotate-45 mb-2 bg-[#0d1117]`}></div>
+                      </div>
+                    </article>
                   </div>
-                  
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase">
-                    {guest.name}
-                  </h2>
-                  
-                  <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8">
-                    {guest.bio}
-                  </p>
 
-                  {/* Schedule Box */}
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
-                    <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-6 flex items-center justify-center md:justify-start gap-3">
-                      <Calendar className={`w-5 h-5 ${style.text}`} />
-                      Performance Schedule
-                    </h4>
+                  {/* Artist Details & Schedule */}
+                  <div className="flex-1 flex flex-col justify-center text-center md:text-left">
+                    <div className={`text-sm font-black uppercase tracking-[0.3em] mb-3 ${style.text}`}>
+                      {guest.role}
+                    </div>
                     
-                    <div className="space-y-5">
-                      {guest.schedule.map((event, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-4 bg-black/40 rounded-xl p-4 border border-white/5 transition-colors hover:border-white/20">
-                          
-                          <div className="flex items-center gap-2 min-w-[140px]">
-                            <Calendar className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm font-semibold text-white">{event.date}</span>
-                          </div>
-                          
-                          <div className="hidden sm:block w-px h-8 bg-gray-700"></div>
-                          
-                          <div className="flex items-center gap-2 min-w-[160px]">
-                            <Clock className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-300">{event.time}</span>
-                          </div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase">
+                      {guest.name}
+                    </h2>
+                    
+                    <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8">
+                      {guest.bio}
+                    </p>
 
-                          <div className="hidden sm:block w-px h-8 bg-gray-700"></div>
+                    {/* Schedule Box */}
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+                      <h4 className="text-lg font-bold text-white uppercase tracking-wider mb-6 flex items-center justify-center md:justify-start gap-3">
+                        <Calendar className={`w-5 h-5 ${style.text}`} />
+                        Performance Schedule
+                      </h4>
+                      
+                      <div className="space-y-5">
+                        {guest.schedule.map((event, i) => (
+                          <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-4 bg-black/40 rounded-xl p-4 border border-white/5 transition-colors hover:border-white/20">
+                            
+                            <div className="flex items-center gap-2 min-w-[140px]">
+                              <Calendar className="w-4 h-4 text-gray-400" />
+                              <span className="text-sm font-semibold text-white">{event.date}</span>
+                            </div>
+                            
+                            <div className="hidden sm:block w-px h-8 bg-gray-700"></div>
+                            
+                            <div className="flex items-center gap-2 min-w-[160px]">
+                              <Clock className="w-4 h-4 text-gray-400" />
+                              <span className="text-sm text-gray-300">{event.time}</span>
+                            </div>
 
-                          <div className="flex items-center gap-2">
-                            <MapPin className={`w-4 h-4 ${style.text}`} />
-                            <span className="text-sm font-medium text-white">{event.location}</span>
+                            <div className="hidden sm:block w-px h-8 bg-gray-700"></div>
+
+                            <div className="flex items-center gap-2">
+                              <MapPin className={`w-4 h-4 ${style.text}`} />
+                              <span className="text-sm font-medium text-white">{event.location}</span>
+                            </div>
+                            
                           </div>
-                          
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
+
                   </div>
 
                 </div>
-
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
       </div>

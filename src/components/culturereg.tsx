@@ -3,7 +3,7 @@ import {
   Shirt, Mic, Palette, ChefHat, Paintbrush, Camera, 
   User, Phone, MapPin, Calendar, ChevronDown, ArrowRight,
   Users, CalendarDays, CheckCircle2, Trophy, Fingerprint, Eye, EyeOff, X, AlertCircle,
-  Layers
+  Layers, Mail
 } from 'lucide-react';
 
 const EventRegistration = () => {
@@ -12,18 +12,21 @@ const EventRegistration = () => {
   const [showId, setShowId] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     fullName: '',
+    email: '', // Added Email back
     gender: '',
     phone: '',
     city: '',
     age: '',
-    activityType: 'FASHION SHOW' // Added for backend
+    activityType: 'FASHION SHOW' 
   });
 
   const [errors, setErrors] = useState({
     fullName: '',
+    email: '', // Added Email back
     gender: '',
     phone: '',
     city: '',
@@ -81,7 +84,6 @@ const EventRegistration = () => {
 
     setUniqueId(`JATRA-CULTURAL-${dd}${mm}${yyyy}-${hh}${min}${ss}`);
     
-    // Update formData with the currently selected activity name
     const currentCategory = categories.find(c => c.id === activeTab);
     if (currentCategory) {
         setFormData(prev => ({ ...prev, activityType: currentCategory.name.replace('\n', ' ') }));
@@ -98,12 +100,13 @@ const EventRegistration = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let hasErrors = false;
-    const newErrors = { fullName: '', gender: '', phone: '', city: '', age: '', agreed: '' };
+    const newErrors = { fullName: '', email: '', gender: '', phone: '', city: '', age: '', agreed: '' };
 
     if (!formData.fullName.trim()) { newErrors.fullName = 'Required.'; hasErrors = true; }
+    if (!formData.email.trim()) { newErrors.email = 'Required.'; hasErrors = true; }
     if (!formData.gender) { newErrors.gender = 'Required.'; hasErrors = true; }
     if (!formData.phone.trim()) { newErrors.phone = 'Required.'; hasErrors = true; }
     if (!formData.city.trim()) { newErrors.city = 'Required.'; hasErrors = true; }
@@ -115,26 +118,54 @@ const EventRegistration = () => {
       return; 
     }
 
-    // formData.activityType is now included in the final object
-    console.log("Submitting to Backend:", formData);
-    alert(`Registration Successful!\nActivity: ${formData.activityType}\nYour ID: ${uniqueId}`);
+    setIsSubmitting(true);
+
+    const payload = {
+        ...formData,
+        uniqueId: uniqueId
+    };
+
+    try {
+        const response = await fetch('https://jatrafestival.in/api/event_register.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(`Registration Successful! Please check your email for the NOC and details.`);
+            // Optional: Reset form after success
+            setFormData({ fullName: '', email: '', gender: '', phone: '', city: '', age: '', activityType: formData.activityType });
+            setIsAgreed(false);
+        } else {
+            alert('Registration failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Submission error:', error);
+        alert('Network error. Please try again.');
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans relative">
       
-      {/* --- NEW HEADER SECTION WITH LOGOS --- */}
-    <header className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-       <img src="\src\assets\jatra-logo45.png" alt="Jatra Logo" className="h-40 w-auto" />
+      {/* --- HEADER SECTION --- */}
+      <header className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <img src="/src/assets/jatra-logo45.png" alt="Jatra Logo" className="h-40 w-auto" />
           <div className="text-center">
             <h5 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter uppercase ">
                 Culuture <span className="text-amber-500">Activities</span>
             </h5>
             <div className="h-1.5 w-24 bg-amber-500 mx-auto mt-2 rounded-full"></div>
             </div>
-            <img src="/src/assets/devasthaliXkartavyakarma.png" alt="Devasthali x Kartavyakarma" className="h-20  w-auto" />
+            <img src="/src/assets/devasthaliXkartavyakarma.png" alt="Devasthali x Kartavyakarma" className="h-20 w-auto" />
       </header>
-      {/* ------------------------------------- */}
 
       {/* Guidelines Modal */}
       {isModalOpen && (
@@ -199,7 +230,7 @@ const EventRegistration = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* Activity Type (Visual Reference & Backend Field) */}
+              {/* Activity Type */}
               <div className="space-y-1 md:col-span-2">
                 <label className="block text-sm font-bold text-gray-800 uppercase tracking-tighter">Selected Activity</label>
                 <div className="relative">
@@ -225,9 +256,18 @@ const EventRegistration = () => {
                 </div>
               </div>
 
+              {/* Added Email Input Here */}
+              <div className="space-y-1">
+                <label className="block text-sm font-bold text-gray-800">Email Address *</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`block w-full pl-10 py-3 bg-white border rounded-lg text-sm ${errors.email ? 'border-red-500' : 'border-gray-200'}`} placeholder="Enter email address" />
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-800">Gender *</label>
-                <select name="gender" value={formData.gender} onChange={handleInputChange} className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm appearance-none">
+                <select name="gender" value={formData.gender} onChange={handleInputChange} className={`block w-full px-4 py-3 bg-white border rounded-lg text-sm appearance-none ${errors.gender ? 'border-red-500' : 'border-gray-200'}`}>
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -236,20 +276,20 @@ const EventRegistration = () => {
 
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-800">Phone *</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm" placeholder="Phone number" />
+                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`block w-full px-4 py-3 bg-white border rounded-lg text-sm ${errors.phone ? 'border-red-500' : 'border-gray-200'}`} placeholder="Phone number" />
               </div>
 
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-800">City *</label>
-                <input type="text" name="city" value={formData.city} onChange={handleInputChange} className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm" placeholder="City" />
+                <input type="text" name="city" value={formData.city} onChange={handleInputChange} className={`block w-full px-4 py-3 bg-white border rounded-lg text-sm ${errors.city ? 'border-red-500' : 'border-gray-200'}`} placeholder="City" />
               </div>
 
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-800">Age *</label>
-                <input type="number" name="age" value={formData.age} onChange={handleInputChange} className="block w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm" placeholder="Age" />
+                <input type="number" name="age" value={formData.age} onChange={handleInputChange} className={`block w-full px-4 py-3 bg-white border rounded-lg text-sm ${errors.age ? 'border-red-500' : 'border-gray-200'}`} placeholder="Age" />
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1 md:col-span-2">
                 <label className="block text-sm font-bold text-gray-800">Unique ID</label>
                 <input type="text" value={uniqueId} readOnly className="block w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg text-sm font-mono cursor-not-allowed" />
               </div>
@@ -263,9 +303,10 @@ const EventRegistration = () => {
               </div>
               <button type="button" onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto bg-gray-900 text-white text-xs font-bold py-2.5 px-5 rounded-lg uppercase">Read Rules</button>
             </div>
+            {errors.agreed && <p className="text-red-500 text-xs font-semibold">{errors.agreed}</p>}
 
-            <button type="submit" className="w-full bg-[#fbab18] hover:bg-[#e59b15] text-gray-900 font-bold py-4 rounded-xl flex items-center justify-center transition-colors uppercase tracking-wide">
-              Register Now <ArrowRight className="ml-2 h-5 w-5" />
+            <button disabled={isSubmitting} type="submit" className="w-full bg-[#fbab18] hover:bg-[#e59b15] text-gray-900 font-bold py-4 rounded-xl flex items-center justify-center transition-colors uppercase tracking-wide disabled:opacity-50">
+              {isSubmitting ? 'Registering...' : 'Register Now'} <ArrowRight className="ml-2 h-5 w-5" />
             </button>
           </form>
         </div>
