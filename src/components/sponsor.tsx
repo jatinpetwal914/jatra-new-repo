@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Globe, Handshake, FileText } from 'lucide-react'; // Added for the grid cards
 
 // --- Official Color Palette & Animations ---
 const colors = {
@@ -10,6 +11,11 @@ const colors = {
   textLight: '#ffffff',
   textDark: '#1a1a1a',
   bgGray: '#f4f5f7',
+  
+  // Card border colors to match your image
+  cardBlue: '#008DD2',
+  cardGreen: '#008542',
+  cardYellow: '#F4A900'
 };
 
 const fadeIn = keyframes`
@@ -23,11 +29,13 @@ const PageWrapper = styled.div`
   width: 100vw;
   background: linear-gradient(135deg, ${colors.textDark} 0%, ${colors.primaryDarkBlue} 100%);
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Changed to column to stack form and guidelines */
   align-items: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
+  gap: 60px; /* Space between form and guidelines */
   font-family: 'Open Sans', 'Segoe UI', sans-serif;
-  @media (max-width: 768px) { padding: 20px 10px; align-items: flex-start; }
+  overflow-x: hidden;
+  @media (max-width: 768px) { padding: 30px 10px; gap: 40px; }
 `;
 
 const MainCard = styled.div`
@@ -109,6 +117,69 @@ const WhatsappButton = styled.a`
   display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background-color: #25D366; color: #fff;
   text-decoration: none; font-size: 15px; font-weight: 700; border-radius: 30px; transition: all 0.3s; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
   &:hover { background-color: #1ebe5d; transform: translateY(-2px); }
+`;
+
+// --- Guidelines / Description Section Styled Components ---
+const GuidelinesContainer = styled.div`
+  width: 100%;
+  max-width: 1100px;
+  animation: ${fadeIn} 1s ease-out 0.3s both;
+  color: ${colors.textLight};
+`;
+
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 40px;
+  h2 { font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 10px; font-family: 'Arial Black', sans-serif; }
+  p { font-size: 16px; color: #aaa; max-width: 600px; margin: 0 auto; }
+`;
+
+const GuidelinesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+`;
+
+const GuidelineCard = styled.div<{ borderTopColor: string }>`
+  background: #111111; /* Dark panel background */
+  border-radius: 16px;
+  padding: 30px;
+  border-top: 4px solid ${props => props.borderTopColor};
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+  &:hover { transform: translateY(-5px); }
+`;
+
+const CardHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  h3 { font-size: 20px; font-weight: 900; color: #fff; margin: 0; font-family: 'Arial Black', sans-serif; }
+`;
+
+const GuidelineList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    color: #cccccc;
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+    &:last-child { margin-bottom: 0; }
+    &::before {
+      content: '▹';
+      color: ${colors.activeYellow};
+      position: absolute;
+      left: 0;
+      top: 0px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
 `;
 
 // --- Main Component Implementation ---
@@ -195,14 +266,14 @@ const SponsorPage: React.FC = () => {
 
   return (
     <PageWrapper>
+      {/* --- FORM CARD SECTION --- */}
       <MainCard>
-        
         <LeftPanel>
           <LeftContent>
             <LogoText>JATRA <span>FESTIVAL</span></LogoText>
             <MainHeading>Partner With Jatra</MainHeading>
             <SubHeading>Be part of a cultural revival. Let's create something extraordinary together.</SubHeading>
-             <img src="/src/assets/jatra-wordmark.png"></img> 
+             <img src="/src/assets/jatra-wordmark.png" alt="Jatra Wordmark" /> 
           </LeftContent>
         </LeftPanel>
 
@@ -301,8 +372,57 @@ const SponsorPage: React.FC = () => {
             </SuccessContainer>
           )}
         </RightPanel>
-
       </MainCard>
+
+      {/* --- GUIDELINES / ABOUT SECTION --- */}
+      <GuidelinesContainer>
+        <SectionHeader>
+          <h2>Sponsorship Guidelines</h2>
+          <p>Learn more about our vision and how we build meaningful collaborations.</p>
+        </SectionHeader>
+
+        <GuidelinesGrid>
+          {/* Card 1: The Vision */}
+          <GuidelineCard borderTopColor={colors.cardBlue}>
+            <CardHead>
+              <Globe size={24} color={colors.cardBlue} />
+              <h3>The Vision</h3>
+            </CardHead>
+            <GuidelineList>
+              <li>Jatra is a large-scale cultural festival focused on showcasing regional identity.</li>
+              <li>We celebrate traditional art, music, and deep community experiences.</li>
+              <li>Our goal is to create an authentic platform for Uttarakhand's rich heritage.</li>
+            </GuidelineList>
+          </GuidelineCard>
+
+          {/* Card 2: The Partnership */}
+          <GuidelineCard borderTopColor={colors.cardGreen}>
+            <CardHead>
+              <Handshake size={24} color={colors.cardGreen} />
+              <h3>Who We're Looking For</h3>
+            </CardHead>
+            <GuidelineList>
+              <li>We are inviting sponsors and collaborators who align deeply with this vision.</li>
+              <li>We value partners open to meaningful, well-executed, and long-term relationships.</li>
+              <li>Your brand should resonate with community growth and cultural preservation.</li>
+            </GuidelineList>
+          </GuidelineCard>
+
+          {/* Card 3: The Process */}
+          <GuidelineCard borderTopColor={colors.cardYellow}>
+            <CardHead>
+              <FileText size={24} color={colors.cardYellow} />
+              <h3>Purpose of this Form</h3>
+            </CardHead>
+            <GuidelineList>
+              <li>This form helps us clearly understand your specific interests and goals.</li>
+              <li>It allows us to evaluate the kind of support or value exchange you can offer.</li>
+              <li>We use this to figure out how we can collaborate effectively for mutual benefit.</li>
+            </GuidelineList>
+          </GuidelineCard>
+        </GuidelinesGrid>
+      </GuidelinesContainer>
+
     </PageWrapper>
   );
 };

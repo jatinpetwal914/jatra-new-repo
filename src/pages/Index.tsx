@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Events from "@/components/Events";
 import Guests from "@/components/Guests";
-import Sponsor from "@/components/sponsor";
+import SponsorsDisplay from "@/components/SponsorsDisplay";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -21,7 +21,7 @@ const Index = () => {
         <Events />
         <Guests />
         <div id="sponsors" className="scroll-mt-[100px]">
-          <Sponsor />
+          <SponsorsDisplay />
         </div>
       </main>
       <Footer />

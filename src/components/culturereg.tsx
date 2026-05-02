@@ -36,7 +36,7 @@ const EventRegistration = () => {
   // Make sure the 'id' matches the keys in the 'activityGuidelines' object below.
   const categories = [
     { id: 1, name: 'FASHION SHOW', icon: Shirt, color: 'text-amber-500' },
-    { id: 2, name: 'OPEN MIC', icon: Mic, color: 'text-green-500' },
+    { id: 2, name: 'OPEN STAGE', icon: Mic, color: 'text-green-500' },
     { id: 3, name: 'SUSTAINABLE ART &\nCRAFT COMPETITION', icon: Palette, color: 'text-blue-500' },
     { id: 4, name: 'COOKING', icon: ChefHat, color: 'text-red-500' },
     { id: 5, name: 'PAINTING', icon: Paintbrush, color: 'text-green-600' },

@@ -11,6 +11,8 @@ import Loader from "@/components/Loader"; // 👈 IMPORT LOADER
 import Register from "@/components/Register";
 import Culturereg from "@/components/culturereg";
 import Advreg from "@/components/advreg";
+import Sponsor from "@/components/sponsor";
+import AllGuestsPage from "@/components/viewsingers";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/cultural-register" element={<Culturereg />} />
             <Route path="/adventure-register" element={<Advreg />} />
+            <Route path="/sponsor" element={<Sponsor />} />
+            <Route path="/viewsingers" element={<AllGuestsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
