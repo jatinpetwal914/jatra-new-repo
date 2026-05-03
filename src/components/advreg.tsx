@@ -196,6 +196,52 @@ const EventRegistration = () => {
         </div>
       )}
 
+        {/* PROFESSIONAL OVERLAY  */}
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 bg-black/40 backdrop-blur-xl">
+        {/* Header Section from Image */}
+        <div className="text-center mb-12 animate-in fade-in zoom-in duration-700">
+           <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-amber-500"></div>
+              <div className="flex gap-1">
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+              </div>
+              <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-amber-500"></div>
+           </div>
+           
+           <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-4">
+                Adventure <span className="text-amber-500">ACTIVITY</span>
+           </h2>
+           
+
+        </div>
+
+        {/* Notice Card */}
+        <div className="bg-[#0f172a]/80 border border-white/10 rounded-3xl p-8 md:p-16 max-w-2xl w-full text-center shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] relative overflow-hidden">
+          {/* Subtle background glow */}
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/10 blur-[80px]"></div>
+          
+          <h3 className="text-3xl md:text-5xl font-black text-white mb-6 uppercase tracking-widest">
+            COMING SOON
+          </h3>
+          
+          <div className="h-1 w-20 bg-gradient-to-r from-purple-500 via-amber-500 to-green-500 mx-auto mb-8 rounded-full"></div>
+          
+          <p className="text-slate-300 text-base md:text-lg leading-relaxed">
+            Currently, the <span className="text-amber-500 font-bold">Volunteer</span> page is open for registration. 
+            Stay tuned as we unveil our Cultural Activities!
+          </p>
+
+          <button 
+            onClick={() => window.location.href='/Register'} 
+            className="mt-10 bg-white hover:bg-amber-500 hover:text-white text-black font-black py-4 px-10 rounded-full uppercase transition-all duration-300 text-sm tracking-widest shadow-xl"
+          >
+            Go to Volunteer Page
+          </button>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="flex-grow max-w-6xl mx-auto w-full px-4 pt-12 pb-24">
         
