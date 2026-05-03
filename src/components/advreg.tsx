@@ -3,7 +3,7 @@ import {
   Wind, Bike, Footprints, Timer, Flag, 
   User, Phone, MapPin, Calendar, ChevronDown, ArrowRight,
   Users, CalendarDays, CheckCircle2, Trophy, Fingerprint, Eye, EyeOff, X,
-  AlertCircle, ShieldCheck, Mountain, Activity, Mail 
+  AlertCircle, ShieldCheck, Mountain, Activity, Mail, Info // Added Info here
 } from 'lucide-react';
 
 const EventRegistration = () => {
@@ -134,23 +134,17 @@ const EventRegistration = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
-      {/* Header - Mobile Optimized and Borderless */}
+      {/* Header - Mobile Optimized */}
       <div className="w-full bg-[#0f172a]">
         <header className="w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-8">
-          
-          {/* Partner Logo - Removed container and border */}
           <div className="w-full md:w-auto flex justify-center md:justify-start">
             <img 
               src="src/assets/devasthaliXkartavyakarma.png" 
-              alt="Devasthali Logo" 
-              width={80}
-              height={80}
-              loading="lazy"
+              alt="Partner Logo" 
               className="h-16 md:h-20 w-auto object-contain" 
             />
           </div>
           
-          {/* Title Section */}
           <div className="text-center md:flex-grow">
             <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
               Adventure <span className="text-amber-500">Activities</span>
@@ -158,14 +152,11 @@ const EventRegistration = () => {
             <div className="h-1.5 w-32 bg-amber-500 mx-auto mt-3 rounded-full shadow-lg shadow-amber-500/20"></div>
           </div>
 
-          {/* Jatra Wordmark - Removed container and border */}
           <div className="w-full md:w-auto flex justify-center md:justify-end">
             <img 
               src="/src/assets/jatra-logo.png" 
-              alt="Jatra Wordmark" 
-              width={100}
-              height={100}
-              className="h-22 md:h-28 w-auto object-contain" 
+              alt="Jatra Logo" 
+              className="h-20 md:h-28 w-auto object-contain" 
             />
           </div>
         </header>
@@ -174,16 +165,16 @@ const EventRegistration = () => {
       {/* Guidelines Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative flex flex-col max-h-[85vh]">
             <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
               <X className="w-6 h-6" />
             </button>
-            <h3 className="text-2xl font-black text-gray-900 mb-1 uppercase tracking-wide">Rules & Guidelines</h3>
-            <p className="text-amber-500 font-bold text-sm mb-4 pb-4 border-b border-gray-100">{formData.activityType}</p>
-            <div className="text-gray-600 text-sm space-y-4 mb-6 overflow-y-auto pr-2 flex-grow">
-              {currentRules.detailed.map((rule, index) => <p key={index}>{rule}</p>)}
+            <h3 className="text-xl font-black text-gray-900 mb-1 uppercase tracking-wide">Rules & Guidelines</h3>
+            <p className="text-amber-500 font-bold text-sm mb-4 border-b pb-2">{formData.activityType}</p>
+            <div className="text-gray-600 text-sm space-y-3 mb-6 overflow-y-auto pr-2 custom-scrollbar">
+              {currentRules.detailed.map((rule, index) => <p key={index} className="leading-relaxed border-l-2 border-amber-100 pl-3">{rule}</p>)}
             </div>
-            <div className="flex items-start mb-6 bg-[#fcfaf8] p-4 rounded-xl border border-gray-200">
+            <div className="flex items-start mb-6 bg-amber-50/50 p-4 rounded-xl border border-amber-100">
               <input
                 id="modal-checkbox"
                 type="checkbox"
@@ -192,164 +183,165 @@ const EventRegistration = () => {
                   setIsAgreed(e.target.checked);
                   if (errors.agreed) setErrors(prev => ({ ...prev, agreed: '' }));
                 }}
-                className="w-5 h-5 text-amber-500 border-gray-300 rounded cursor-pointer mt-0.5"
+                className="w-5 h-5 text-amber-500 cursor-pointer mt-0.5 accent-amber-500"
               />
               <label htmlFor="modal-checkbox" className="ml-3 font-bold text-sm text-gray-800 cursor-pointer">
-                I have read and agree to follow the rules and guidelines for this activity.
+                I agree to the rules and guidelines for this activity.
               </label>
             </div>
-            <button onClick={() => setIsModalOpen(false)} className="w-full bg-[#fbab18] hover:bg-[#e59b15] text-gray-900 font-bold py-3.5 rounded-xl uppercase tracking-wide">
-              Continue to Form
+            <button onClick={() => setIsModalOpen(false)} className="w-full bg-[#fbab18] hover:bg-amber-500 text-gray-900 font-bold py-3.5 rounded-xl uppercase transition-colors">
+              Accept and Continue
             </button>
           </div>
         </div>
       )}
 
       {/* Main Content */}
-      <div className="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-8 pb-24">
+      <div className="flex-grow max-w-6xl mx-auto w-full px-4 pt-12 pb-24">
         
-        {/* Activity Tabs */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        {/* Activity Tabs - SLIDING & SMALLER ICONS ON MOBILE */}
+        <div className="flex flex-nowrap md:grid md:grid-cols-5 gap-3 mb-12 overflow-x-auto pb-6 px-2 snap-x scrollbar-hide">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isActive = activeTab === cat.id;
             return (
               <button
                 key={cat.id}
+                type="button"
                 onClick={() => setActiveTab(cat.id)}
-                className={`relative flex flex-col items-center justify-center p-4 h-32 rounded-xl border transition-all ${isActive ? 'border-amber-500 ring-1 ring-amber-500 shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
+                className={`relative flex-none w-[135px] md:w-auto flex flex-col items-center justify-center p-3 h-28 md:h-32 rounded-xl border transition-all snap-center ${
+                  isActive 
+                    ? 'border-amber-500 bg-amber-50 shadow-md scale-105 z-10' 
+                    : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm'
+                }`}
               >
-                <Icon className={`w-8 h-8 mb-2 ${cat.color}`} strokeWidth={1.5} />
-                <span className="text-gray-900 font-bold text-sm mb-1">{cat.id}</span>
-                <span className="text-[10px] font-bold text-gray-800 text-center uppercase tracking-wider whitespace-pre-line leading-tight">
+                {/* Responsive Icon: Smaller on mobile, Larger on desktop */}
+                <Icon className={`w-6 h-6 md:w-8 md:h-8 mb-2 md:mb-3 ${cat.color}`} />
+                
+                <span className="text-[10px] md:text-[11px] font-black text-gray-800 text-center uppercase leading-tight px-1 whitespace-pre-line">
                   {cat.name}
                 </span>
-                {isActive && <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-b border-r border-amber-500 rotate-45"></div>}
+                
+                {/* Visual Arrow Indicator for Active Tab */}
+                {isActive && (
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-amber-50 rotate-45 border-r border-b border-amber-500 z-20"></div>
+                )}
               </button>
             );
           })}
         </div>
 
-        {/* Form Container */}
-        <div className="bg-[#fcfaf8] border border-gray-100 rounded-xl p-8 md:p-10 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 mb-8 uppercase tracking-wide">Registration Form</h2>
+        {/* Registration Form */}
+        <div className="bg-[#fcfaf8] border border-gray-100 rounded-3xl p-6 md:p-12 shadow-sm">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="bg-amber-500 p-2 rounded-lg text-white shadow-lg shadow-amber-500/30"><Activity size={18}/></div>
+            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Registration Form</h2>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              <div className="space-y-1 md:col-span-2">
-                <label className="block text-sm font-bold text-gray-800 uppercase tracking-tighter">Selected Activity</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Activity className="h-5 w-5 text-amber-500" strokeWidth={1.5} />
-                  </div>
-                  <input
-                    type="text"
-                    value={formData.activityType}
-                    readOnly
-                    className="block w-full pl-10 py-3 bg-amber-50 border border-amber-200 rounded-lg text-sm font-bold text-amber-700 outline-none cursor-not-allowed"
-                  />
+              <div className="md:col-span-2">
+                <label className="block text-xs font-black text-gray-400 uppercase mb-2">Selected Activity</label>
+                <div className="flex items-center bg-amber-50 border border-amber-200/50 rounded-xl px-4 py-4 text-amber-700 font-bold">
+                   <ArrowRight className="mr-3 h-4 w-4 text-amber-500" /> {formData.activityType}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">Full Name *</label>
+                <label className="block text-sm font-bold text-gray-700">Full Name *</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><User className="h-5 w-5 text-gray-400" /></div>
-                  <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="Enter your full name" className={`block w-full pl-10 py-3 border rounded-lg text-sm outline-none transition-all ${errors.fullName ? 'border-red-500' : 'border-gray-200 focus:border-amber-500'}`} />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`} placeholder="Your full name" />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">Email Address *</label>
+                <label className="block text-sm font-bold text-gray-700">Email Address *</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`block w-full pl-10 py-3 bg-white border rounded-lg text-sm outline-none transition-all ${errors.email ? 'border-red-500' : 'border-gray-200 focus:border-amber-500'}`} placeholder="Enter email address" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.email ? 'border-red-500' : 'border-gray-200'}`} placeholder="Email" />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">Gender *</label>
+                <label className="block text-sm font-bold text-gray-700">Gender *</label>
                 <div className="relative">
-                  <select name="gender" value={formData.gender} onChange={handleInputChange} className={`block w-full pl-4 pr-10 py-3 border rounded-lg text-sm appearance-none outline-none ${errors.gender ? 'border-red-500' : 'border-gray-200'}`}>
-                    <option value="" disabled>Select gender</option>
+                  <select name="gender" value={formData.gender} onChange={handleInputChange} className={`w-full px-4 py-3 bg-white border rounded-xl outline-none appearance-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.gender ? 'border-red-500' : 'border-gray-200'}`}>
+                    <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">Phone Number *</label>
+                <label className="block text-sm font-bold text-gray-700">Phone Number *</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Phone className="h-5 w-5 text-gray-400" /></div>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Phone number" className={`block w-full pl-10 py-3 border rounded-lg text-sm outline-none ${errors.phone ? 'border-red-500' : 'border-gray-200 focus:border-amber-500'}`} />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.phone ? 'border-red-500' : 'border-gray-200'}`} placeholder="Phone" />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">City *</label>
+                <label className="block text-sm font-bold text-gray-700">City *</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><MapPin className="h-5 w-5 text-gray-400" /></div>
-                  <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="City" className={`block w-full pl-10 py-3 border rounded-lg text-sm outline-none ${errors.city ? 'border-red-500' : 'border-gray-200 focus:border-amber-500'}`} />
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="text" name="city" value={formData.city} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.city ? 'border-red-500' : 'border-gray-200'}`} placeholder="City" />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-bold text-gray-800">Age *</label>
+                <label className="block text-sm font-bold text-gray-700">Age *</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Calendar className="h-5 w-5 text-gray-400" /></div>
-                  <input type="number" name="age" value={formData.age} onChange={handleInputChange} placeholder="Age" className={`block w-full pl-10 py-3 border rounded-lg text-sm outline-none ${errors.age ? 'border-red-500' : 'border-gray-200 focus:border-amber-500'}`} />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="number" name="age" value={formData.age} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.age ? 'border-red-500' : 'border-gray-200'}`} placeholder="Age" />
                 </div>
               </div>
 
-              <div className="space-y-1 md:col-span-2">
-                <label className="block text-sm font-bold text-gray-800">User Unique ID</label>
+              <div className="md:col-span-2 space-y-1">
+                <label className="block text-sm font-bold text-gray-700">Registration Unique ID</label>
                 <div className="relative">
-                  <Fingerprint className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                  <input type={showId ? "text" : "password"} value={uniqueId} readOnly className="block w-full pl-10 pr-10 py-3 bg-gray-100 border border-gray-200 rounded-lg text-sm font-mono text-gray-600" />
-                  <button type="button" onClick={() => setShowId(!showId)} className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600">
-                    {showId ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  <Fingerprint className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type={showId ? "text" : "password"} value={uniqueId} readOnly className="w-full pl-10 pr-12 py-3 bg-gray-100 border border-gray-200 rounded-xl text-sm font-mono text-gray-600 outline-none" />
+                  <button type="button" onClick={() => setShowId(!showId)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-500">
+                    {showId ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4">
-              <div className={`flex flex-col sm:flex-row items-center justify-between p-4 rounded-xl border transition-colors ${isAgreed ? 'bg-green-50/50 border-green-200' : 'bg-white border-gray-200'}`}>
-                <div className="flex items-center space-x-3 mb-4 sm:mb-0">
-                  {isAgreed ? <CheckCircle2 className="w-6 h-6 text-green-500" /> : <div className="w-6 h-6 rounded-full border-2 border-gray-300" />}
-                  <span className={`font-bold text-sm ${isAgreed ? 'text-green-700' : 'text-gray-600'}`}>
-                    {isAgreed ? 'Rules & Guidelines Accepted' : 'Please read and accept the guidelines'} <span className="text-red-500">*</span>
-                  </span>
-                </div>
-                <button type="button" onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto bg-gray-900 text-white text-xs font-bold py-2.5 px-5 rounded-lg uppercase">Read Rules</button>
+            <div className={`flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl border transition-all ${isAgreed ? 'bg-green-50 border-green-200 shadow-sm' : 'bg-white border-gray-200'}`}>
+              <div className="flex items-center gap-3 mb-4 sm:mb-0">
+                {isAgreed ? <CheckCircle2 className="text-green-500" /> : <Info className="text-amber-500" />}
+                <span className="font-bold text-sm text-gray-600">Please read guidelines to enable registration</span>
               </div>
-              {errors.agreed && <p className="text-red-500 text-xs font-semibold mt-2 px-1">{errors.agreed}</p>}
+              <button type="button" onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto bg-gray-900 text-white text-xs font-bold py-3 px-6 rounded-xl uppercase hover:bg-black transition-colors shadow-md">Read Rules</button>
             </div>
+            {errors.agreed && <p className="text-red-500 text-xs font-black italic">{errors.agreed}</p>}
 
-            <button disabled={isSubmitting} type="submit" className="w-full bg-[#fbab18] hover:bg-[#e59b15] text-gray-900 font-bold py-4 rounded-xl flex items-center justify-center uppercase transition-all disabled:opacity-50">
+            <button disabled={isSubmitting} type="submit" className="w-full bg-[#fbab18] hover:bg-[#e59b15] text-gray-900 font-black py-5 rounded-2xl flex items-center justify-center transition-all uppercase tracking-widest disabled:opacity-50 shadow-xl shadow-amber-500/20">
               {isSubmitting ? 'Registering...' : 'Register Now'} <ArrowRight className="ml-2 h-5 w-5" />
             </button>
           </form>
         </div>
 
-        {/* Dynamic Overview Section */}
+        {/* Guidelines Overview Section */}
         <div className="mt-20">
           <div className="mb-8 flex items-end gap-3">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest border-b-2 border-amber-500 pb-1">Guidelines Overview</h3>
+            <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b-2 border-amber-500 pb-1">Guidelines Overview</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {currentRules.overview.map((item, index) => {
               const Icon = item.icon;
               return (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
-                    <Icon className="w-6 h-6 text-gray-700" />
+                <div key={index} className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100 shrink-0">
+                    <Icon className="w-5 h-5 text-amber-600" />
                   </div>
-                  <p className="text-sm font-semibold text-gray-800 leading-tight">{item.text}</p>
+                  <p className="text-xs font-bold text-gray-800 leading-tight">{item.text}</p>
                 </div>
               );
             })}
@@ -357,12 +349,17 @@ const EventRegistration = () => {
         </div>
       </div>
 
-      <footer className="bg-[#0f172a] py-8 border-t border-gray-800 flex flex-col items-center justify-center">
-        <p className="text-[#fbab18] text-xs font-bold uppercase tracking-[0.2em] mb-4 text-center">Celebrate. Participate. Preserve.</p>
+      <footer className="bg-[#0f172a] py-12 flex flex-col items-center border-t border-white/5">
+        <p className="text-amber-500 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Celebrate. Participate. Preserve.</p>
         <div className="flex justify-center w-full">
-          <img src={currentLogo} width={80} height={80} className="h-16 md:h-20 object-contain" alt="Current Activity Logo" />
+          <img src={currentLogo} className="h-16 md:h-20 object-contain opacity-80" alt="Activity Logo" />
         </div>
       </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}} />
     </div>
   );
 };

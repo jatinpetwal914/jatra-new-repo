@@ -165,11 +165,9 @@ const EventRegistration = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
-      {/* Header - Optimized for Mobile & Borderless */}
+      {/* Header */}
       <div className="w-full bg-[#0f172a]">
         <header className="w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-8">
-          
-          {/* Partner Logo */}
           <div className="w-full md:w-auto flex justify-center md:justify-start">
             <img 
               src="/src/assets/devasthaliXkartavyakarma.png" 
@@ -177,16 +175,12 @@ const EventRegistration = () => {
               className="h-16 md:h-20 w-auto object-contain"
             />
           </div>
-          
-          {/* Main Title - Borderless */}
-          <div className="text-center md:flex-grow border-0">
+          <div className="text-center md:flex-grow">
             <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white m-0 p-0 border-0">
               Cultural <span className="text-amber-500">Activities</span>
             </h1>
             <div className="h-1.5 w-32 bg-amber-500 mx-auto mt-3 rounded-full"></div>
           </div>
-
-          {/* Festival Logo */}
           <div className="w-full md:w-auto flex justify-center md:justify-end">
             <img 
               src="/src/assets/jatra-logo.png" 
@@ -234,8 +228,9 @@ const EventRegistration = () => {
       )}
 
       <div className="flex-grow max-w-6xl mx-auto w-full px-4 pt-12 pb-24">
-        {/* Category Tabs */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+        
+        {/* Category Tabs - SLIDING & SMALLER ICONS ON MOBILE */}
+        <div className="flex flex-nowrap md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 mb-12 overflow-x-auto pb-6 px-2 snap-x scrollbar-hide">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isActive = activeTab === cat.id;
@@ -244,46 +239,66 @@ const EventRegistration = () => {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveTab(cat.id)}
-                className={`flex flex-col items-center justify-center p-4 h-28 rounded-xl border transition-all ${
-                  isActive ? 'border-amber-500 bg-amber-50 shadow-md scale-105' : 'bg-white border-gray-200 hover:border-gray-300'
+                className={`relative flex-none w-[135px] md:w-auto flex flex-col items-center justify-center p-3 h-28 md:h-32 rounded-xl border transition-all snap-center ${
+                  isActive 
+                    ? 'border-amber-500 bg-amber-50 shadow-md scale-105 z-10' 
+                    : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm'
                 }`}
               >
-                <Icon className={`w-7 h-7 mb-2 ${cat.color}`} />
-                <span className="text-[10px] font-black text-gray-800 text-center uppercase leading-tight">{cat.name}</span>
+                {/* Responsive Icon: Smaller on mobile, Larger on desktop */}
+                <Icon className={`w-6 h-6 md:w-8 md:h-8 mb-2 md:mb-3 ${cat.color}`} />
+                
+                <span className="text-[10px] md:text-[11px] font-black text-gray-800 text-center uppercase leading-tight px-1">
+                  {cat.name}
+                </span>
+                
+                {/* Visual Arrow Indicator for Active Tab */}
+                {isActive && (
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-amber-50 rotate-45 border-r border-b border-amber-500 z-20"></div>
+                )}
               </button>
             );
           })}
         </div>
 
-        {/* Main Form Box */}
+        {/* Registration Form */}
         <div className="bg-[#fcfaf8] border border-gray-100 rounded-3xl p-6 md:p-12 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
-            <div className="bg-amber-500 p-2 rounded-lg text-white shadow-lg shadow-amber-500/30"><Layers size={20}/></div>
-            <h2 className="text-xl font-black text-gray-900 uppercase">Registration</h2>
+            <div className="bg-amber-500 p-2 rounded-lg text-white shadow-lg shadow-amber-500/30"><Layers size={18}/></div>
+            <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Registration Form</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="block text-xs font-black text-gray-400 uppercase mb-1">Active Selection</label>
-                <div className="flex items-center bg-white border border-gray-200 rounded-xl px-4 py-3 text-amber-700 font-bold shadow-sm">
-                   {formData.activityType}
+                <label className="block text-xs font-black text-gray-400 uppercase mb-2">Selected Activity</label>
+                <div className="flex items-center bg-amber-50 border border-amber-200/50 rounded-xl px-4 py-4 text-amber-700 font-bold">
+                   <ArrowRight className="mr-3 h-4 w-4 text-amber-500" /> {formData.activityType}
                 </div>
               </div>
               
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-700">Full Name *</label>
-                <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className={`w-full px-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`} placeholder="Your name" />
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.fullName ? 'border-red-500' : 'border-gray-200'}`} placeholder="Your full name" />
+                </div>
               </div>
 
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-700">Email Address *</label>
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`w-full px-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.email ? 'border-red-500' : 'border-gray-200'}`} placeholder="Email" />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.email ? 'border-red-500' : 'border-gray-200'}`} placeholder="Email" />
+                </div>
               </div>
 
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-700">Phone Number *</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full px-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.phone ? 'border-red-500' : 'border-gray-200'}`} placeholder="Phone" />
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 ${errors.phone ? 'border-red-500' : 'border-gray-200'}`} placeholder="Phone" />
+                </div>
               </div>
 
               <div className="space-y-1">
@@ -299,7 +314,7 @@ const EventRegistration = () => {
               <div className="space-y-1">
                 <label className="block text-sm font-bold text-gray-700">Gender *</label>
                 <select name="gender" value={formData.gender} onChange={handleInputChange} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
-                  <option value="">Select</option>
+                  <option value="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -307,16 +322,16 @@ const EventRegistration = () => {
               </div>
             </div>
 
-            <div className={`flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl border transition-all ${isAgreed ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
+            <div className={`flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl border transition-all ${isAgreed ? 'bg-green-50 border-green-200 shadow-sm' : 'bg-white border-gray-200'}`}>
               <div className="flex items-center gap-3 mb-4 sm:mb-0">
                 {isAgreed ? <CheckCircle2 className="text-green-500" /> : <Info className="text-amber-500" />}
                 <span className="font-bold text-sm text-gray-600">Please read guidelines to enable registration</span>
               </div>
-              <button type="button" onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto bg-gray-900 text-white text-xs font-bold py-3 px-6 rounded-xl uppercase hover:bg-black transition-colors">Read Rules</button>
+              <button type="button" onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto bg-gray-900 text-white text-xs font-bold py-3 px-6 rounded-xl uppercase hover:bg-black transition-colors shadow-md">Read Rules</button>
             </div>
             {errors.agreed && <p className="text-red-500 text-xs font-black italic">{errors.agreed}</p>}
 
-            <button disabled={isSubmitting} type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-4 rounded-2xl flex items-center justify-center transition-all uppercase tracking-widest disabled:opacity-50 shadow-lg shadow-amber-500/20">
+            <button disabled={isSubmitting} type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-5 rounded-2xl flex items-center justify-center transition-all uppercase tracking-widest disabled:opacity-50 shadow-xl shadow-amber-500/30">
               {isSubmitting ? 'Processing...' : 'Submit Registration'} <ArrowRight className="ml-2 h-5 w-5" />
             </button>
           </form>
@@ -327,6 +342,11 @@ const EventRegistration = () => {
         <p className="text-amber-500 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Celebrate. Participate. Preserve.</p>
         <img src='/src/assets/jatra-logo.png' className="h-10 w-auto opacity-50 grayscale" alt="Jatra Logo" />
       </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}} />
     </div>
   );
 };
