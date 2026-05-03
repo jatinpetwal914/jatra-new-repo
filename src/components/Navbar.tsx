@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import partnerLogo from "@/assets/devasthaliXkartavyakarma.png";
 
 const links = [
@@ -22,6 +23,20 @@ const Navbar = () => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
       setPastHero(window.scrollY > Math.max(window.innerHeight - 100, 300));
+
+      // Update active link based on scroll position
+      let currentActive = '#home';
+      const sectionLinks = links.filter(link => link.label !== "Register");
+      sectionLinks.forEach(link => {
+        const section = document.querySelector(link.href);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            currentActive = link.href;
+          }
+        }
+      });
+      setActive(currentActive);
     };
 
     onScroll();
@@ -61,22 +76,34 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-10">
             {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setActive(link.href)}
-                className={`relative text-[10px] font-bold tracking-[0.3em] uppercase transition-all ${
-                  pastHero ? "text-foreground/80 hover:text-foreground" : "text-white/90 hover:text-white"
-                }`}
-              >
-                {link.label}
-                {active === link.href && (
-                  <motion.span 
-                    layoutId="underline" 
-                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full bg-[#FFB800]" 
-                  />
-                )}
-              </a>
+              link.label === "Register" ? (
+                <Link
+                  key={link.href}
+                  to="/register"
+                  className={`relative text-[10px] font-bold tracking-[0.3em] uppercase transition-all ${
+                    pastHero ? "text-foreground/80 hover:text-foreground" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setActive(link.href)}
+                  className={`relative text-[10px] font-bold tracking-[0.3em] uppercase transition-all ${
+                    pastHero ? "text-foreground/80 hover:text-foreground" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                  {active === link.href && (
+                    <motion.span 
+                      layoutId="underline" 
+                      className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full bg-[#FFB800]" 
+                    />
+                  )}
+                </a>
+              )
             ))}
           </div>
 
@@ -114,17 +141,28 @@ const Navbar = () => {
           />
 
           {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => {
-                setActive(link.href);
-                setIsOpen(false);
-              }}
-              className="text-xl font-black tracking-[0.2em] uppercase text-foreground/80 hover:text-[#FFB800] transition-colors"
-            >
-              {link.label}
-            </a>
+            link.label === "Register" ? (
+              <Link
+                key={link.href}
+                to="/register"
+                onClick={() => setIsOpen(false)}
+                className="text-xl font-black tracking-[0.2em] uppercase text-foreground/80 hover:text-[#FFB800] transition-colors"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => {
+                  setActive(link.href);
+                  setIsOpen(false);
+                }}
+                className="text-xl font-black tracking-[0.2em] uppercase text-foreground/80 hover:text-[#FFB800] transition-colors"
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </div>
       </div>

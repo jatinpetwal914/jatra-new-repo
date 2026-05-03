@@ -10,7 +10,7 @@ import adventureBg from "@/assets/Adventure_activity.png";
 const ExperienceSelector = () => {
   return (
     // 'justify-center' added to ensure it vertically centers and fits perfectly in the window frame
-    <div className="min-h-screen bg-[#0d1117] text-white flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative z-0 overflow-hidden">
+    <div id="events" className="min-h-screen bg-[#0d1117] text-white flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative z-0 overflow-hidden">
       
       {/* Header Section */}
       <div className="text-center mb-8 z-10 flex flex-col items-center">

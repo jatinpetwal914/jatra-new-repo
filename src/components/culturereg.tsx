@@ -106,7 +106,7 @@ const EventRegistration = () => {
           
           <p className="text-slate-300 text-base md:text-lg leading-relaxed">
             Currently, the <span className="text-amber-500 font-bold">Volunteer</span> page is open for registration. 
-            Stay tuned as we unveil our Cultural Activities!
+            Stay tuned as we unveil our Adventure Activities!
           </p>
 
           <button 
