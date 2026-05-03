@@ -43,7 +43,8 @@ const HeroSection = () => {
   return (
     <section 
       id="home" 
-      className="relative h-screen min-h-[600px] w-full overflow-hidden bg-black flex flex-col justify-end pb-24 md:pb-32 scroll-mt-[100px]"
+      // CHANGED: Reduced md:pb-32 to md:pb-16 to bring it closer to the bottom on PC
+      className="relative h-screen min-h-[600px] w-full overflow-hidden bg-black flex flex-col justify-end pb-24 md:pb-16 scroll-mt-[100px]"
     >
       {/* VIDEO BACKGROUND */}
       <div className="absolute inset-0 z-0">
@@ -60,11 +61,13 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* CONTENT WRAPPER - FIXED: Added pt-20 to push everything below the Navbar */}
-      <div className="relative z-20 w-full px-6 md:px-12 flex flex-col items-center md:items-start gap-2 mb-8 md:mb-12 pt-24 md:pt-32">
+      {/* CONTENT WRAPPER */}
+      {/* CHANGED: Removed md:pt-32 and md:mb-12 so it naturally falls to the bottom */}
+      <div className="relative z-20 w-full px-6 md:px-12 flex flex-col items-center md:items-start gap-2 mb-8 md:mb-0 pt-24 md:pt-0">
         
-        {/* LOGO CONTAINER - FIXED: Slightly smaller size (w-56) and shifted down with mt-10 */}
-        <div className="w-56 md:w-[380px] mt-10 md:mt-12 flex items-center md:items-start justify-center md:justify-start pointer-events-none">
+        {/* LOGO CONTAINER */}
+        {/* CHANGED: Removed md:mt-12 to stop pushing it downward against the container limits */}
+        <div className="w-56 md:w-[380px] mt-10 md:mt-0 flex items-center md:items-start justify-center md:justify-start pointer-events-none">
           <AnimatePresence mode="wait">
             <motion.img
               key={logoIndex}
@@ -82,7 +85,8 @@ const HeroSection = () => {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex flex-row items-center justify-center md:justify-start gap-3 text-white mt-4 md:mt-[-15px] mb-6 text-center md:text-left"
+          // CHANGED: Changed md:mt-[-15px] to md:mt-2 to properly balance it under the logo on PC
+          className="flex flex-row items-center justify-center md:justify-start gap-3 text-white mt-4 md:mt-2 mb-6 text-center md:text-left"
         >
           <motion.span variants={bellShake} animate="ring" className="text-2xl md:text-3xl origin-top">
             🔔
